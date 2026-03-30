@@ -7,16 +7,34 @@ import Pagination from '../components/common/Pagination';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorMessage from '../components/common/ErrorMessage';
 import { getCars } from '../services/api';
+import { translateCar } from '../utils/translate';
 import styles from './CarListPage.module.css';
+
+const extractCars = (res) => {
+  if (!res) return [];
+  if (Array.isArray(res)) return res;
+  if (res.data && Array.isArray(res.data.cars)) return res.data.cars;
+  if (res.data && Array.isArray(res.data.data)) return res.data.data;
+  if (Array.isArray(res.data)) return res.data;
+  if (Array.isArray(res.cars)) return res.cars;
+  return [];
+};
+
+const extractTotal = (res) => {
+  if (!res) return 0;
+  if (res.data && typeof res.data.total === 'number') return res.data.total;
+  if (typeof res.total === 'number') return res.total;
+  return extractCars(res).length;
+};
 
 export default function CarListPage() {
   const { brand, model } = useParams();
   const navigate = useNavigate();
 
-  const [cars, setCars]     = useState([]);
-  const [total, setTotal]   = useState(0);
-  const [loading, setLoad]  = useState(false);
-  const [error, setError]   = useState(null);
+  const [cars, setCars]       = useState([]);
+  const [total, setTotal]     = useState(0);
+  const [loading, setLoad]    = useState(false);
+  const [error, setError]     = useState(null);
   const [filters, setFilters] = useState({
     brand: brand || '',
     model: model || '',
@@ -30,20 +48,22 @@ export default function CarListPage() {
   }, [brand, model]);
 
   useEffect(() => {
-    const fetch = async () => {
+    const doFetch = async () => {
       setLoad(true);
       setError(null);
       try {
         const res = await getCars(filters);
-        setCars(res.data || res.cars || []);
-        setTotal(res.total || 0);
+        setCars(extractCars(res).map(translateCar));
+        setTotal(extractTotal(res));
       } catch (e) {
         setError(e.message);
+        setCars([]);
+        setTotal(0);
       } finally {
         setLoad(false);
       }
     };
-    fetch();
+    doFetch();
   }, [filters]);
 
   const updateFilters = (patch) => {
@@ -59,11 +79,11 @@ export default function CarListPage() {
 
   const handleSort = (sortVal) => {
     const sortMap = {
-      priceAsc:    { sortBy: 'price',   sortOrder: 'asc' },
-      priceDesc:   { sortBy: 'price',   sortOrder: 'desc' },
-      mileageAsc:  { sortBy: 'mileage', sortOrder: 'asc' },
-      mileageDesc: { sortBy: 'mileage', sortOrder: 'desc' },
-      yearDesc:    { sortBy: 'year',    sortOrder: 'desc' },
+      priceAsc:    { sortBy: 'price',     sortOrder: 'asc'  },
+      priceDesc:   { sortBy: 'price',     sortOrder: 'desc' },
+      mileageAsc:  { sortBy: 'mileage',   sortOrder: 'asc'  },
+      mileageDesc: { sortBy: 'mileage',   sortOrder: 'desc' },
+      yearDesc:    { sortBy: 'year',      sortOrder: 'desc' },
       new:         { sortBy: 'createdAt', sortOrder: 'desc' },
     };
     setFilters((f) => ({ ...f, ...sortMap[sortVal], page: 1 }));
@@ -74,7 +94,6 @@ export default function CarListPage() {
     setFilters({ brand: '', model: '', page: 1, limit: 20, sortBy: '' });
   };
 
-  // Breadcrumb
   const crumbs = [{ label: 'Нүүр хуудас', href: '/' }];
   if (filters.brand) crumbs.push({ label: filters.brand, href: `/cars/${encodeURIComponent(filters.brand)}` });
   if (filters.model) crumbs.push({ label: filters.model });
@@ -82,27 +101,21 @@ export default function CarListPage() {
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
-        {/* Breadcrumb */}
         <nav className={styles.breadcrumb}>
           {crumbs.map((c, i) => (
             <React.Fragment key={i}>
               {i > 0 && <span className={styles.bsep}>/</span>}
-              {c.href ? <Link to={c.href} className={styles.blink}>{c.label}</Link>
-                      : <span className={styles.bcur}>{c.label}</span>}
+              {c.href
+                ? <Link to={c.href} className={styles.blink}>{c.label}</Link>
+                : <span className={styles.bcur}>{c.label}</span>}
             </React.Fragment>
           ))}
           <span className={styles.btotal}>Нийт: {total.toLocaleString()} машин</span>
         </nav>
 
         <div className={styles.layout}>
-          {/* Sidebar filter */}
-          <CarFilter
-            filters={filters}
-            onChange={updateFilters}
-            activeBrand={brand}
-          />
+          <CarFilter filters={filters} onChange={updateFilters} activeBrand={brand} />
 
-          {/* Main content */}
           <div className={styles.main}>
             <CarSortBar
               total={total}
@@ -112,7 +125,7 @@ export default function CarListPage() {
             />
 
             {loading && <LoadingSpinner text="Машин хайж байна..." />}
-            {error && <ErrorMessage message={error} onRetry={() => setFilters((f) => ({ ...f }))} />}
+            {error   && <ErrorMessage message={error} onRetry={() => setFilters((f) => ({ ...f }))} />}
 
             {!loading && !error && (
               <>

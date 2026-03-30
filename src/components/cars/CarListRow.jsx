@@ -4,15 +4,24 @@ import { formatMNT, formatKRW, formatKm } from '../../utils/format';
 import styles from './CarListRow.module.css';
 
 export default function CarListRow({ car }) {
-  const id = car.id || car.vehicleId;
-  const title = car.title || `${car.brand || ''} ${car.model || ''}`.trim();
-  const year = car.year || car.manufactureYear;
-  const mileage = car.mileage;
-  const fuel = car.fuelType || car.fuel;
-  const cc = car.cc || car.displacement;
-  const basePrice = car.krwPrice || car.basePrice;
-  const totalPrice = car.totalPrice || car.mntPrice;
-  const images = car.images || (car.thumbnail ? [car.thumbnail] : []);
+  const id       = car.id || car.vehicleId || car.encar_id;
+  const title    = car.title || `${car.brand || ''} ${car.model || ''}`.trim();
+  const year     = car.year || car.manufactureYear;
+  const mileage  = car.mileage;
+  const fuel     = car.fuelType || car.fuel;
+  const cc       = car.cc || car.displacement;
+  const krwPrice = car.krwPrice || car.basePrice ||
+                   car.prices?.KRW ||
+                   (car.price ? Math.round(parseFloat(car.price) * 10000) : null);
+
+  // images массив эсвэл нэг image
+  const images = Array.isArray(car.images) && car.images.length > 0
+    ? car.images
+    : car.image
+      ? [car.image]
+      : car.thumbnail
+        ? [car.thumbnail]
+        : [];
 
   return (
     <Link to={`/listing/${id}`} className={styles.row}>
@@ -31,15 +40,19 @@ export default function CarListRow({ car }) {
       <div className={styles.info}>
         <h3 className={styles.title}>{title}</h3>
         <div className={styles.meta}>
-          {year && <span>{year}</span>}
+          {year     && <span>{year}</span>}
           {mileage != null && <><span className={styles.sep}>—</span><span>{formatKm(mileage)}</span></>}
-          {fuel && <><span className={styles.sep}>—</span><span>{fuel}</span></>}
-          {cc && <><span className={styles.sep}>—</span><span>{cc}сс</span></>}
+          {fuel     && <><span className={styles.sep}>—</span><span>{fuel}</span></>}
+          {cc       && <><span className={styles.sep}>—</span><span>{cc}сс</span></>}
         </div>
-        {basePrice && (
-          <p className={styles.basePrice}>Үндсэн үнэ: {formatKRW(basePrice)}</p>
+        {krwPrice && (
+          <p className={styles.basePrice}>Үндсэн үнэ: {formatKRW(krwPrice)}</p>
         )}
-        <p className={styles.totalPrice}>{formatMNT(totalPrice)}</p>
+        {krwPrice && (
+          <p className={styles.totalPrice}>
+            {formatMNT(Math.round(krwPrice * 2.4))}
+          </p>
+        )}
       </div>
     </Link>
   );

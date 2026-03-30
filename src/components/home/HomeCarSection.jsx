@@ -1,10 +1,12 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
 import CarCard from '../cars/CarCard';
 import styles from './HomeCarSection.module.css';
 
-export default function HomeCarSection({ title, cars = [], loading }) {
+export default function HomeCarSection({ title, cars, loading }) {
   const scrollRef = useRef(null);
+
+  // cars array биш бол хамгаалах
+  const carList = Array.isArray(cars) ? cars : [];
 
   const scroll = (dir) => {
     if (scrollRef.current) {
@@ -27,7 +29,7 @@ export default function HomeCarSection({ title, cars = [], loading }) {
           ? Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className={styles.skeleton} />
             ))
-          : cars.map((car) => (
+          : carList.map((car) => (
               <div key={car.id || car.vehicleId} className={styles.cardWrap}>
                 <CarCard car={car} />
               </div>

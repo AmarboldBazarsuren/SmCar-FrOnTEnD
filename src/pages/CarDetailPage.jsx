@@ -7,6 +7,7 @@ import CarSpecTable from '../components/cars/CarSpecTable';
 import CarBreadcrumb from '../components/cars/CarBreadcrumb';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorMessage from '../components/common/ErrorMessage';
+import { translateCar } from '../utils/translate';
 import styles from './CarDetailPage.module.css';
 
 export default function CarDetailPage() {
@@ -18,9 +19,11 @@ export default function CarDetailPage() {
   if (error)   return <ErrorMessage message={error} />;
   if (!data)   return null;
 
-  const { carInfo, priceBreakdown } = data;
+  // carInfo талбаруудыг Монголоор орчуулах
+  const carInfo = translateCar(data.carInfo);
+  const { priceBreakdown } = data;
 
-  const title = carInfo?.title || `Машин #${id}`;
+  const title  = carInfo?.title || `Машин #${id}`;
   const images = carInfo?.images || (carInfo?.thumbnail ? [carInfo.thumbnail] : []);
 
   const breadcrumbs = [
@@ -38,7 +41,6 @@ export default function CarDetailPage() {
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
-        {/* Top bar: breadcrumb + encar link */}
         <div className={styles.topBar}>
           <CarBreadcrumb items={breadcrumbs} />
           <a
@@ -51,9 +53,7 @@ export default function CarDetailPage() {
           </a>
         </div>
 
-        {/* Main layout */}
         <div className={styles.layout}>
-          {/* Left: gallery + info */}
           <div className={styles.left}>
             <CarImageGallery images={images} title={title} />
 
@@ -64,28 +64,19 @@ export default function CarDetailPage() {
               <div className={styles.section}>
                 <h2 className={styles.sectionTitle}>Дэлгэрэнгүй оношилгооны мэдээлэл</h2>
                 <div className={styles.diagGrid}>
-                  <div className={styles.diagItem}>
-                    <span className={styles.diagLabel}>Хөдөлгүүр</span>
-                    <span className={`${styles.diagStatus} ${styles.ok}`}>Норм</span>
-                  </div>
-                  <div className={styles.diagItem}>
-                    <span className={styles.diagLabel}>Хурдны хайрцаг</span>
-                    <span className={`${styles.diagStatus} ${styles.ok}`}>Норм</span>
-                  </div>
-                  <div className={styles.diagItem}>
-                    <span className={styles.diagLabel}>Тоормос</span>
-                    <span className={`${styles.diagStatus} ${styles.ok}`}>Норм</span>
-                  </div>
-                  <div className={styles.diagItem}>
-                    <span className={styles.diagLabel}>Цахилгаан</span>
-                    <span className={`${styles.diagStatus} ${styles.ok}`}>Норм</span>
-                  </div>
+                  {[
+                    'Хөдөлгүүр', 'Хурдны хайрцаг', 'Тоормос', 'Цахилгаан'
+                  ].map((label) => (
+                    <div key={label} className={styles.diagItem}>
+                      <span className={styles.diagLabel}>{label}</span>
+                      <span className={`${styles.diagStatus} ${styles.ok}`}>Норм</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right: price box */}
           <div className={styles.right}>
             <CarPriceBox priceBreakdown={priceBreakdown} onOrder={handleOrder} />
             {orderSuccess && (
