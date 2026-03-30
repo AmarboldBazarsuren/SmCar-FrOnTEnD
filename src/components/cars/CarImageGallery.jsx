@@ -1,51 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './CarImageGallery.module.css';
 
-// Thumbnail-д жижиг чанар, main зурагт том чанар ашиглах
-const thumbUrl = (url) => url.replace('rw=1280&cw=1280', 'rw=300&cw=300');
+const thumbUrl = (url) => url.replace('rw=1280&cw=1280', 'rw=200&cw=200');
 
 export default function CarImageGallery({ images = [], title }) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [loaded, setLoaded]       = useState({});       // ачаалагдсан зургийн index
   const preloadRef                = useRef([]);
+  const thumbsRef                 = useRef(null);
 
-  // Бүх зургийг арын горимд урьдчилан ачаалах
+  // Preload images
   useEffect(() => {
     if (!images.length) return;
-
-    // Одоогийн зургийг тэргүүн ачаалах
     const preloadAt = (idx) => {
       if (!images[idx] || preloadRef.current[idx]) return;
       const img = new Image();
       img.src = images[idx];
-      img.onload = () => setLoaded((prev) => ({ ...prev, [idx]: true }));
       preloadRef.current[idx] = img;
     };
-
-    // 1. Эхний зургийг шууд
     preloadAt(0);
-
-    // 2. Бусдыг 200ms-ийн дараа дараалан
-    const timer = setTimeout(() => {
-      images.forEach((_, i) => preloadAt(i));
-    }, 200);
-
+    const timer = setTimeout(() => images.forEach((_, i) => preloadAt(i)), 200);
     return () => clearTimeout(timer);
   }, [images]);
 
-  // Дараагийн зургийг идэвхтэй урьдчилан ачаалах
+  // Scroll active thumb into view
   useEffect(() => {
-    const next = (activeIdx + 1) % images.length;
-    const prev = (activeIdx - 1 + images.length) % images.length;
-    [next, prev].forEach((idx) => {
-      if (!preloadRef.current[idx]) {
-        const img = new Image();
-        img.src = images[idx];
-        img.onload = () => setLoaded((p) => ({ ...p, [idx]: true }));
-        preloadRef.current[idx] = img;
-      }
-    });
-  }, [activeIdx, images]);
+    if (!thumbsRef.current) return;
+    const thumbEl = thumbsRef.current.children[activeIdx];
+    if (thumbEl) thumbEl.scrollIntoView({ inline: 'nearest', behavior: 'smooth', block: 'nearest' });
+  }, [activeIdx]);
 
   if (!images.length) {
     return (
@@ -58,13 +40,12 @@ export default function CarImageGallery({ images = [], title }) {
   const prev = () => setActiveIdx((i) => (i === 0 ? images.length - 1 : i - 1));
   const next = () => setActiveIdx((i) => (i === images.length - 1 ? 0 : i + 1));
 
-  // Гар утасны swipe дэмжих
   const touchStartX = useRef(null);
   const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
   const onTouchEnd   = (e) => {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
     touchStartX.current = null;
   };
 
@@ -76,7 +57,6 @@ export default function CarImageGallery({ images = [], title }) {
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {/* Бүх зургийг DOM-д байлгаж, зөвхөн идэвхтэйг харуулах — тэгвэл switch хурдан */}
         {images.map((src, i) => (
           <img
             key={i}
@@ -92,9 +72,9 @@ export default function CarImageGallery({ images = [], title }) {
         <div className={styles.counter}>{activeIdx + 1} / {images.length}</div>
       </div>
 
-      {/* Thumbnail-ууд */}
-      <div className={styles.thumbs}>
-        {images.slice(0, 4).map((img, i) => (
+      {/* Thumbnail strip — бүх thumbnail-г доор нь горизонтаалаар */}
+      <div className={styles.thumbs} ref={thumbsRef}>
+        {images.map((img, i) => (
           <button
             key={i}
             className={`${styles.thumb} ${activeIdx === i ? styles.thumbActive : ''}`}
@@ -105,9 +85,6 @@ export default function CarImageGallery({ images = [], title }) {
               alt={`thumb-${i}`}
               loading="lazy"
             />
-            {i === 3 && images.length > 4 && (
-              <div className={styles.moreOverlay}>+{images.length - 4}</div>
-            )}
           </button>
         ))}
       </div>

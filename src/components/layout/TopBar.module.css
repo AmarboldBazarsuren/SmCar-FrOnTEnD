@@ -1,11 +1,12 @@
 .bar {
   background: var(--primary);
   color: rgba(255,255,255,0.85);
-  font-size: 12px;
-  padding: 5px 24px;
+  font-size: 13px;
+  padding: 6px var(--page-pad);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .tagline {
@@ -25,4 +26,19 @@
 .rate {
   font-weight: 700;
   color: #fff;
+}
+
+@media (max-width: 640px) {
+  .bar {
+    font-size: 11px;
+    padding: 5px 12px;
+  }
+  .tagline {
+    display: none;
+  }
+  .right {
+    gap: 12px;
+    width: 100%;
+    justify-content: space-between;
+  }
 }

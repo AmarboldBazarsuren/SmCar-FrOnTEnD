@@ -21,14 +21,16 @@
   --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
   --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
   --font: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-  --header-height: 64px;
+  --header-height: 68px;
+  --page-max: 1400px;
+  --page-pad: 32px;
 }
 
 html {
-  font-size: 14px;
+  font-size: 16px; /* was 14px — now bigger */
   scroll-behavior: smooth;
 }
 
@@ -36,7 +38,7 @@ body {
   font-family: var(--font);
   color: var(--text-primary);
   background: var(--bg-white);
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -56,11 +58,7 @@ img {
   max-width: 100%;
 }
 
-select {
-  font-family: var(--font);
-}
-
-input {
+select, input {
   font-family: var(--font);
 }
 
@@ -69,3 +67,23 @@ input {
 ::-webkit-scrollbar-track { background: var(--bg-light); }
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* ── Responsive breakpoints ── */
+/* Mobile: < 640px */
+/* Tablet: 640px–1024px */
+/* Desktop: > 1024px */
+
+@media (max-width: 1024px) {
+  :root {
+    --page-pad: 20px;
+    --header-height: 60px;
+  }
+}
+
+@media (max-width: 640px) {
+  html { font-size: 15px; }
+  :root {
+    --page-pad: 16px;
+    --header-height: 56px;
+  }
+}

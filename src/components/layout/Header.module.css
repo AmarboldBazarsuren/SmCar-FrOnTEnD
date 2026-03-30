@@ -3,20 +3,21 @@
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 200;
   height: var(--header-height);
 }
 
 .inner {
-  max-width: 1280px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--page-pad);
   height: 100%;
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 20px;
 }
 
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
@@ -32,15 +33,16 @@
   color: var(--text-primary);
 }
 
+/* Desktop nav */
 .nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
 }
 
 .link {
-  padding: 6px 12px;
+  padding: 7px 12px;
   font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
@@ -50,27 +52,17 @@
   cursor: pointer;
   transition: color 0.15s, background 0.15s;
   white-space: nowrap;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-family: var(--font);
 }
 
-.link:hover {
-  color: var(--text-primary);
-  background: var(--bg-gray);
-}
+.link:hover { color: var(--text-primary); background: var(--bg-gray); }
+.active { color: var(--text-primary); font-weight: 700; }
+.chevron { font-size: 10px; margin-left: 3px; }
 
-.link.active {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.dropdownWrap {
-  position: relative;
-}
-
-.chevron {
-  font-size: 10px;
-  margin-left: 2px;
-}
-
+/* CTA button */
 .ctaBtn {
   display: flex;
   align-items: center;
@@ -78,20 +70,136 @@
   background: var(--accent-green);
   color: #fff;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 13.5px;
   padding: 9px 18px;
   border-radius: 8px;
   white-space: nowrap;
   text-decoration: none;
-  transition: background 0.15s, transform 0.1s;
+  transition: background 0.15s;
   flex-shrink: 0;
 }
 
-.ctaBtn:hover {
-  background: #16a34a;
-  transform: translateY(-1px);
+.ctaBtn:hover { background: #16a34a; }
+.ctaIcon { font-size: 15px; }
+
+/* Hamburger */
+.menuBtn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
-.ctaIcon {
+.bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+  transform-origin: center;
+}
+
+.bar1Open { transform: translateY(7px) rotate(45deg); }
+.bar2Open { opacity: 0; transform: scaleX(0); }
+.bar3Open { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile overlay menu ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 300;
+  /* overlay нь header-ийн доороос эхлэх */
+  top: var(--header-height);
+}
+
+.drawer {
+  background: var(--bg-white);
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.drawerTitle {
   font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.drawerLink {
+  display: block;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-light);
+  transition: background 0.12s, color 0.12s;
+}
+
+.drawerLink:hover { background: var(--bg-light); }
+.drawerLinkActive { color: var(--primary); font-weight: 700; }
+
+.drawerDivider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+.drawerCta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 16px;
+  padding: 14px 20px;
+  background: var(--accent-green);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+  justify-content: center;
+}
+
+/* ── Responsive breakpoints ── */
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .ctaBtn { padding: 8px 14px; font-size: 12.5px; }
+  .ctaText { display: none; }
+  .menuBtn { display: flex; }
+}
+
+@media (max-width: 480px) {
+  .ctaBtn { display: none; }
+  .logoText { font-size: 13.5px; }
 }

@@ -30,6 +30,7 @@ const extractTotal = (res) => {
 export default function CarListPage() {
   const { brand, model } = useParams();
   const navigate = useNavigate();
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const [cars, setCars]       = useState([]);
   const [total, setTotal]     = useState(0);
@@ -68,6 +69,7 @@ export default function CarListPage() {
 
   const updateFilters = (patch) => {
     setFilters((f) => ({ ...f, ...patch, page: 1 }));
+    setFilterOpen(false);
     if (patch.brand !== undefined || patch.model !== undefined) {
       const b = patch.brand ?? filters.brand;
       const m = patch.model ?? filters.model;
@@ -113,8 +115,20 @@ export default function CarListPage() {
           <span className={styles.btotal}>Нийт: {total.toLocaleString()} машин</span>
         </nav>
 
+        {/* Mobile filter toggle */}
+        <button
+          className={styles.filterToggleBtn}
+          onClick={() => setFilterOpen((o) => !o)}
+        >
+          <span>🔍 Шүүлтүүр{filters.brand ? ` — ${filters.brand}` : ''}</span>
+          <span>{filterOpen ? '▲' : '▼'}</span>
+        </button>
+
         <div className={styles.layout}>
-          <CarFilter filters={filters} onChange={updateFilters} activeBrand={brand} />
+          {/* Filter sidebar — desktop always visible, mobile toggleable */}
+          <div className={`${styles.filterDrawer} ${filterOpen ? '' : styles.closed}`}>
+            <CarFilter filters={filters} onChange={updateFilters} activeBrand={brand} />
+          </div>
 
           <div className={styles.main}>
             <CarSortBar

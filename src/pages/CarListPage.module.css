@@ -4,22 +4,23 @@
 }
 
 .inner {
-  max-width: 1280px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 0 24px 48px;
+  padding: 0 var(--page-pad) 56px;
 }
 
 .breadcrumb {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 16px 0 12px;
-  font-size: 13px;
+  padding: 18px 0 14px;
+  font-size: 14px;
+  flex-wrap: wrap;
 }
 
 .bsep {
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .blink {
@@ -45,7 +46,7 @@
 
 .layout {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   align-items: flex-start;
 }
 
@@ -57,15 +58,72 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .empty {
   text-align: center;
-  padding: 64px 24px;
+  padding: 72px 24px;
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 15px;
   background: var(--bg-white);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+}
+
+/* Mobile filter drawer */
+.filterToggleBtn {
+  display: none;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  cursor: pointer;
+  text-align: left;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterDrawer {
+  display: contents; /* desktop: normal flow */
+}
+
+@media (max-width: 900px) {
+  .layout {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .filterToggleBtn {
+    display: flex;
+  }
+
+  .filterDrawer {
+    display: block;
+    width: 100%;
+  }
+
+  .filterDrawer.closed {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .inner {
+    padding: 0 var(--page-pad) 40px;
+  }
+  .breadcrumb {
+    padding: 14px 0 10px;
+    font-size: 13px;
+  }
 }

@@ -2,58 +2,46 @@
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   position: relative;
   overflow: hidden;
-  min-height: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200"><path d="M0 100 Q200 40 400 100 Q600 160 800 100 L800 200 L0 200Z" fill="rgba(255,255,255,0.02)"/></svg>') no-repeat center;
-  background-size: cover;
-}
-
-.overlay {
-  padding: 28px 24px 12px;
-  text-align: center;
-  z-index: 1;
+  padding: 28px var(--page-pad) 28px;
 }
 
 .tagline {
   color: #fff;
   font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
   text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  text-align: center;
+  margin-bottom: 18px;
 }
 
+/* ── Search bar ── */
 .searchBar {
   display: flex;
-  align-items: center;
-  gap: 0;
+  align-items: stretch;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  margin: 16px 24px 28px;
-  z-index: 1;
   width: 100%;
-  max-width: 700px;
+  max-width: 680px;
 }
 
 .selectWrap {
   flex: 1;
   position: relative;
   border-right: 1px solid var(--border);
+  min-width: 0;
 }
 
 .select {
   width: 100%;
-  padding: 14px 36px 14px 16px;
+  height: 52px;
+  padding: 0 32px 0 16px;
   border: none;
   background: transparent;
   font-size: 14px;
@@ -61,34 +49,67 @@
   appearance: none;
   cursor: pointer;
   outline: none;
+  font-family: var(--font);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.select:disabled {
-  color: var(--text-muted);
-}
+.select:disabled { color: var(--text-muted); }
 
 .arrow {
   position: absolute;
-  right: 12px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
   pointer-events: none;
 }
 
 .searchBtn {
-  padding: 14px 28px;
+  flex-shrink: 0;
+  padding: 0 28px;
+  height: 52px;
   background: var(--text-primary);
   color: #fff;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   border: none;
   cursor: pointer;
   transition: background 0.15s;
   white-space: nowrap;
+  font-family: var(--font);
 }
 
-.searchBtn:hover {
-  background: #374151;
+.searchBtn:hover { background: #374151; }
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .banner { padding: 22px 16px 22px; }
+  .tagline { font-size: 18px; margin-bottom: 14px; }
+
+  .searchBar {
+    flex-direction: column;
+    border-radius: 10px;
+    gap: 0;
+  }
+
+  .selectWrap {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .select {
+    height: 48px;
+    font-size: 15px;
+    padding: 0 36px 0 14px;
+  }
+
+  .searchBtn {
+    height: 50px;
+    font-size: 15px;
+    width: 100%;
+    border-radius: 0 0 10px 10px;
+  }
 }

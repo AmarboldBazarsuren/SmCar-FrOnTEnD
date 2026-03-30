@@ -8,7 +8,7 @@
 }
 
 .rows {
-  padding: 16px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -18,9 +18,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 9px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border-light);
-  gap: 8px;
+  gap: 10px;
 }
 
 .row:last-child {
@@ -28,7 +28,7 @@
 }
 
 .label {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
   display: flex;
   align-items: center;
@@ -38,19 +38,19 @@
 
 .hint {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
   cursor: help;
 }
 
 .value {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
 }
 
 .valueKrw {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -60,28 +60,28 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
+  padding: 16px 20px;
   background: var(--bg-light);
   border-top: 2px solid var(--border);
 }
 
 .totalLabel {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .totalValue {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--text-primary);
 }
 
 .paymentRows {
-  padding: 12px 16px;
+  padding: 14px 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   border-top: 1px solid var(--border-light);
 }
 
@@ -89,8 +89,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 8px;
-  font-size: 12.5px;
+  gap: 10px;
+  font-size: 13.5px;
   color: var(--text-secondary);
 }
 
@@ -103,17 +103,28 @@
 
 .orderBtn {
   width: 100%;
-  padding: 16px;
+  padding: 18px;
   background: var(--text-primary);
   color: #fff;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   border: none;
   cursor: pointer;
   transition: background 0.15s;
   letter-spacing: 0.3px;
+  font-family: var(--font);
 }
 
 .orderBtn:hover {
   background: #374151;
+}
+
+/* Mobile: not sticky */
+@media (max-width: 768px) {
+  .box {
+    position: static;
+  }
+  .totalValue {
+    font-size: 20px;
+  }
 }

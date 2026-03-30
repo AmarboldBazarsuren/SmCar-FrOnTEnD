@@ -1,18 +1,19 @@
 .gallery {
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  gap: 10px;
 }
 
+/* Main зураг */
 .mainWrap {
-  flex: 1;
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--bg-gray);
-  aspect-ratio: 4/3;
+  aspect-ratio: 16/10;  /* wider than 4/3 — encar.mn-тэй ижил */
+  width: 100%;
 }
 
-/* Бүх зурагийг давхарлаж байрлуулах */
 .mainImg {
   position: absolute;
   inset: 0;
@@ -20,11 +21,9 @@
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  /* transition байхгүй — тэгвэл шууд солигдоно, удаашрахгүй */
   pointer-events: none;
 }
 
-/* Зөвхөн идэвхтэй зураг харагдана */
 .mainImgActive {
   opacity: 1;
   pointer-events: auto;
@@ -34,13 +33,13 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: rgba(0,0,0,0.45);
   color: #fff;
   border: none;
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,50 +47,59 @@
   transition: background 0.15s;
   z-index: 2;
   line-height: 1;
-  padding-bottom: 1px;
 }
 
 .navBtn:hover {
   background: rgba(0,0,0,0.7);
 }
 
-.prevBtn { left: 10px; }
-.nextBtn { right: 10px; }
+.prevBtn { left: 12px; }
+.nextBtn { right: 12px; }
 
 .counter {
   position: absolute;
-  bottom: 10px;
-  right: 12px;
-  background: rgba(0,0,0,0.5);
+  bottom: 12px;
+  right: 14px;
+  background: rgba(0,0,0,0.55);
   color: #fff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 12px;
+  padding: 4px 10px;
+  border-radius: 14px;
   z-index: 2;
 }
 
 .placeholder {
-  aspect-ratio: 4/3;
+  aspect-ratio: 16/10;
   background: var(--bg-gray);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 16px;
 }
 
+/* ── Thumbnail strip — HORIZONTAL, доор нь ── */
 .thumbs {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
-  width: 140px;
-  flex-shrink: 0;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.thumbs::-webkit-scrollbar {
+  height: 4px;
+}
+.thumbs::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
 }
 
 .thumb {
-  width: 100%;
+  flex: 0 0 120px;
   aspect-ratio: 4/3;
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
@@ -100,7 +108,8 @@
   padding: 0;
   background: var(--bg-gray);
   position: relative;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, opacity 0.15s;
+  opacity: 0.7;
 }
 
 .thumb img {
@@ -111,6 +120,11 @@
 
 .thumbActive {
   border-color: var(--primary);
+  opacity: 1;
+}
+
+.thumb:hover {
+  opacity: 1;
 }
 
 .moreOverlay {
@@ -121,6 +135,26 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .mainWrap {
+    aspect-ratio: 4/3;
+  }
+  .thumb {
+    flex: 0 0 90px;
+  }
+  .navBtn {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thumb {
+    flex: 0 0 72px;
+  }
 }

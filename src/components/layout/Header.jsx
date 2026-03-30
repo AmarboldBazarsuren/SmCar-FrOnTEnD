@@ -1,46 +1,84 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+
+  // route өөрчлөгдөхөд menu хаах
+  useEffect(() => { setMenuOpen(false); }, [location]);
+
+  // menu нээлттэй үед body scroll хаах
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
+  const navLinks = [
+    { to: '/', label: 'Нүүр хуудас', end: true },
+    { to: '/orders', label: 'Захиалагчид' },
+    { to: '/guide', label: 'Захиалга өгөх заавар' },
+  ];
 
   return (
-    <header className={styles.header}>
-      <div className={styles.inner}>
-        {/* Logo */}
-        <Link to="/" className={styles.logo}>
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect width="28" height="28" rx="6" fill="#111827"/>
-            <text x="5" y="21" fontSize="16" fontWeight="800" fill="white" fontFamily="Manrope">G</text>
-          </svg>
-          <span className={styles.logoText}>GARID TRADE</span>
-        </Link>
+    <>
+      <header className={styles.header}>
+        <div className={styles.inner}>
+          <Link to="/" className={styles.logo}>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect width="28" height="28" rx="6" fill="#111827"/>
+              <text x="5" y="21" fontSize="16" fontWeight="800" fill="white" fontFamily="Manrope">G</text>
+            </svg>
+            <span className={styles.logoText}>GARID TRADE</span>
+          </Link>
 
-        {/* Nav */}
-        <nav className={styles.nav}>
-          <NavLink to="/" end className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
-            Нүүр хуудас
-          </NavLink>
-          <NavLink to="/orders" className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
-            Захиалагчид
-          </NavLink>
-          <NavLink to="/guide" className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
-            Захиалга өгөх заавар
-          </NavLink>
-          <div className={styles.dropdownWrap}>
-            <button className={styles.link}>
-              Туслах цэс <span className={styles.chevron}>▾</span>
-            </button>
+          {/* Desktop nav */}
+          <nav className={styles.nav}>
+            {navLinks.map((n) => (
+              <NavLink key={n.to} to={n.to} end={n.end}
+                className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
+                {n.label}
+              </NavLink>
+            ))}
+            <button className={styles.link}>Туслах цэс <span className={styles.chevron}>▾</span></button>
+          </nav>
+
+          <Link to="/travel-cars" className={styles.ctaBtn}>
+            <span className={styles.ctaIcon}>🌿</span>
+            <span className={styles.ctaText}>Аялалын машин</span>
+          </Link>
+
+          <button className={styles.menuBtn} onClick={() => setMenuOpen(o => !o)} aria-label="Цэс">
+            <span className={`${styles.bar} ${menuOpen ? styles.bar1Open : ''}`} />
+            <span className={`${styles.bar} ${menuOpen ? styles.bar2Open : ''}`} />
+            <span className={`${styles.bar} ${menuOpen ? styles.bar3Open : ''}`} />
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile menu overlay */}
+      {menuOpen && (
+        <div className={styles.overlay} onClick={() => setMenuOpen(false)}>
+          <div className={styles.drawer} onClick={e => e.stopPropagation()}>
+            <div className={styles.drawerHeader}>
+              <span className={styles.drawerTitle}>Цэс</span>
+              <button className={styles.closeBtn} onClick={() => setMenuOpen(false)}>✕</button>
+            </div>
+            {navLinks.map((n) => (
+              <NavLink key={n.to} to={n.to} end={n.end}
+                className={({ isActive }) => isActive ? `${styles.drawerLink} ${styles.drawerLinkActive}` : styles.drawerLink}
+                onClick={() => setMenuOpen(false)}>
+                {n.label}
+              </NavLink>
+            ))}
+            <div className={styles.drawerDivider} />
+            <Link to="/travel-cars" className={styles.drawerCta} onClick={() => setMenuOpen(false)}>
+              🌿 Аялалын машин
+            </Link>
           </div>
-        </nav>
-
-        {/* CTA */}
-        <Link to="/travel-cars" className={styles.ctaBtn}>
-          <span className={styles.ctaIcon}>🌿</span>
-          Аялалын машин
-        </Link>
-      </div>
-    </header>
+        </div>
+      )}
+    </>
   );
 }

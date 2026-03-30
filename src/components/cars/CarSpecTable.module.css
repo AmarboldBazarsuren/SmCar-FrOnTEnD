@@ -1,27 +1,26 @@
 .wrap {
-  margin-top: 16px;
+  margin-top: 18px;
 }
 
-/* Inline specs row — shown right under title like encar.mn */
 .inlineSpecs {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 4px 0;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-secondary);
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .inlineItem {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 .inlineItem + .inlineItem::before {
   content: '|';
-  margin: 0 8px;
+  margin: 0 10px;
   color: var(--border);
 }
 
@@ -34,7 +33,6 @@
   color: var(--text-secondary);
 }
 
-/* Detailed table */
 .table {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -47,10 +45,10 @@
 .row {
   display: flex;
   align-items: center;
-  padding: 11px 16px;
+  padding: 13px 18px;
   border-bottom: 1px solid var(--border-light);
   border-right: 1px solid var(--border-light);
-  gap: 8px;
+  gap: 10px;
 }
 
 .row:nth-child(even) {
@@ -62,14 +60,29 @@
 }
 
 .label {
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--text-muted);
-  width: 100px;
+  width: 110px;
   flex-shrink: 0;
 }
 
 .value {
-  font-size: 13px;
+  font-size: 14.5px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+  .table {
+    grid-template-columns: 1fr;
+  }
+  .row {
+    border-right: none;
+  }
+  .row:nth-child(even) {
+    border-bottom: 1px solid var(--border-light);
+  }
+  .row:last-child {
+    border-bottom: none;
+  }
 }
