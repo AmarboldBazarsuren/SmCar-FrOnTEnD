@@ -1,0 +1,28 @@
+.bar {
+  background: var(--primary);
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+  padding: 5px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tagline {
+  font-weight: 500;
+}
+
+.right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.phones {
+  opacity: 0.9;
+}
+
+.rate {
+  font-weight: 700;
+  color: #fff;
+}

@@ -1,0 +1,75 @@
+.wrap {
+  margin-top: 16px;
+}
+
+/* Inline specs row — shown right under title like encar.mn */
+.inlineSpecs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.inlineItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.inlineItem + .inlineItem::before {
+  content: '|';
+  margin: 0 8px;
+  color: var(--border);
+}
+
+.inlineLabel {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.inlineValue {
+  color: var(--text-secondary);
+}
+
+/* Detailed table */
+.table {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  gap: 8px;
+}
+
+.row:nth-child(even) {
+  border-right: none;
+}
+
+.row:nth-last-child(-n+2) {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}

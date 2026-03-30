@@ -1,0 +1,97 @@
+.header {
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.link {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.link:hover {
+  color: var(--text-primary);
+  background: var(--bg-gray);
+}
+
+.link.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.dropdownWrap {
+  position: relative;
+}
+
+.chevron {
+  font-size: 10px;
+  margin-left: 2px;
+}
+
+.ctaBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-green);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.ctaBtn:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+.ctaIcon {
+  font-size: 15px;
+}
