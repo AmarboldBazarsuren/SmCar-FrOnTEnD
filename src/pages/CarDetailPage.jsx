@@ -24,8 +24,11 @@ export default function CarDetailPage() {
   const { priceBreakdown } = data;
 
   const title  = carInfo?.title || `Машин #${id}`;
-  const images = carInfo?.images || (carInfo?.thumbnail ? [carInfo.thumbnail] : []);
-
+const images = Array.isArray(carInfo?.images) && carInfo.images.length > 0
+  ? carInfo.images
+  : carInfo?.thumbnail
+  ? [carInfo.thumbnail]
+  : [];
   const breadcrumbs = [
     { label: 'Нүүр хуудас', href: '/' },
     carInfo?.brand && { label: carInfo.brand, href: `/cars/${encodeURIComponent(carInfo.brand)}` },
@@ -44,7 +47,7 @@ export default function CarDetailPage() {
         <div className={styles.topBar}>
           <CarBreadcrumb items={breadcrumbs} />
           <a
-            href={`https://encar.mn/listing/${id}`}
+href={`https://www.encar.com/dc/dc_cardetailview.do?carid=${id}`}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.encarLink}
