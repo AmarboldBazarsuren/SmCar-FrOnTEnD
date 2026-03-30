@@ -42,6 +42,11 @@ export default function CarListPage() {
     page: 1,
     limit: 20,
     sortBy: '',
+    sortOrder: '',
+    fuelType: '',
+    transmission: '',
+    yearFrom: '',
+    yearTo: '',
   });
 
   useEffect(() => {
@@ -53,7 +58,11 @@ export default function CarListPage() {
       setLoad(true);
       setError(null);
       try {
-        const res = await getCars(filters);
+        // Хоосон утгуудыг хасаж явуулна
+        const cleanFilters = Object.fromEntries(
+          Object.entries(filters).filter(([_, v]) => v !== '' && v !== null && v !== undefined)
+        );
+        const res = await getCars(cleanFilters);
         setCars(extractCars(res).map(translateCar));
         setTotal(extractTotal(res));
       } catch (e) {
@@ -70,6 +79,7 @@ export default function CarListPage() {
   const updateFilters = (patch) => {
     setFilters((f) => ({ ...f, ...patch, page: 1 }));
     setFilterOpen(false);
+    // URL update зөвхөн brand/model өөрчлөгдөхөд
     if (patch.brand !== undefined || patch.model !== undefined) {
       const b = patch.brand ?? filters.brand;
       const m = patch.model ?? filters.model;
@@ -88,64 +98,74 @@ export default function CarListPage() {
       yearDesc:    { sortBy: 'year',      sortOrder: 'desc' },
       new:         { sortBy: 'createdAt', sortOrder: 'desc' },
     };
-    setFilters((f) => ({ ...f, ...sortMap[sortVal], page: 1 }));
+    const mapped = sortMap[sortVal] || {};
+    setFilters((f) => ({ ...f, ...mapped, page: 1 }));
   };
 
   const clearFilters = () => {
     navigate('/cars');
-    setFilters({ brand: '', model: '', page: 1, limit: 20, sortBy: '' });
+    setFilters({ brand: '', model: '', page: 1, limit: 20, sortBy: '', sortOrder: '', fuelType: '', transmission: '', yearFrom: '', yearTo: '' });
   };
 
   const crumbs = [{ label: 'Нүүр хуудас', href: '/' }];
   if (filters.brand) crumbs.push({ label: filters.brand, href: `/cars/${encodeURIComponent(filters.brand)}` });
   if (filters.model) crumbs.push({ label: filters.model });
 
+  const hasActiveFilters = filters.brand || filters.model || filters.fuelType || filters.transmission || filters.yearFrom || filters.yearTo;
+
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
-        <nav className={styles.breadcrumb}>
-          {crumbs.map((c, i) => (
-            <React.Fragment key={i}>
-              {i > 0 && <span className={styles.bsep}>/</span>}
-              {c.href
-                ? <Link to={c.href} className={styles.blink}>{c.label}</Link>
-                : <span className={styles.bcur}>{c.label}</span>}
-            </React.Fragment>
-          ))}
-          <span className={styles.btotal}>Нийт: {total.toLocaleString()} машин</span>
-        </nav>
+        <div className={styles.topSection}>
+          <nav className={styles.breadcrumb}>
+            {crumbs.map((c, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && <span className={styles.bsep}>/</span>}
+                {c.href
+                  ? <Link to={c.href} className={styles.blink}>{c.label}</Link>
+                  : <span className={styles.bcur}>{c.label}</span>}
+              </React.Fragment>
+            ))}
+            <span className={styles.btotal}>Нийт: {total.toLocaleString()} машин</span>
+          </nav>
+
+          {/* SortBar — дээд талд, бүтэн өргөнөөр */}
+          <CarSortBar
+            total={total}
+            activeSort={filters.sortBy}
+            onSort={handleSort}
+            onClearFilters={hasActiveFilters ? clearFilters : null}
+          />
+        </div>
 
         {/* Mobile filter toggle */}
         <button
           className={styles.filterToggleBtn}
           onClick={() => setFilterOpen((o) => !o)}
         >
-          <span>🔍 Шүүлтүүр{filters.brand ? ` — ${filters.brand}` : ''}</span>
+          <span>🔍 Шүүлтүүр{filters.brand ? ` — ${filters.brand}` : ''}{filters.fuelType ? ` • ${filters.fuelType}` : ''}</span>
           <span>{filterOpen ? '▲' : '▼'}</span>
         </button>
 
+        {/* Mobile drawer */}
+        <div className={`${styles.filterDrawer} ${filterOpen ? styles.open : ''}`}>
+          <CarFilter filters={filters} onChange={updateFilters} activeBrand={brand} />
+        </div>
+
         <div className={styles.layout}>
-          {/* Filter sidebar — desktop always visible, mobile toggleable */}
-          <div className={`${styles.filterDrawer} ${filterOpen ? '' : styles.closed}`}>
+          {/* Desktop sidebar */}
+          <div className={styles.filterSidebar}>
             <CarFilter filters={filters} onChange={updateFilters} activeBrand={brand} />
           </div>
 
           <div className={styles.main}>
-            <CarSortBar
-              total={total}
-              activeSort={filters.sortBy}
-              onSort={handleSort}
-              onClearFilters={filters.brand || filters.model ? clearFilters : null}
-            />
-
             {loading && <LoadingSpinner text="Машин хайж байна..." />}
             {error   && <ErrorMessage message={error} onRetry={() => setFilters((f) => ({ ...f }))} />}
-
             {!loading && !error && (
               <>
                 {cars.length === 0 ? (
                   <div className={styles.empty}>
-                    <p>Машин олдсонгүй. Шүүлтүүрийг өөрчлөн дахин хайна уу.</p>
+                    <p>🔍 Машин олдсонгүй.<br/>Шүүлтүүрийг өөрчлөн дахин хайна уу.</p>
                   </div>
                 ) : (
                   <div className={styles.list}>

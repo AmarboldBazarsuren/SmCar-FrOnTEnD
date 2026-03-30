@@ -1,6 +1,10 @@
-.hero {
+.heroWrap {
+  padding: 24px var(--page-pad) 0;
   max-width: var(--page-max);
-  margin: 24px auto 0;
+  margin: 0 auto;
+}
+
+.hero {
   display: grid;
   grid-template-columns: 1fr 340px;
   background: #111;
@@ -8,22 +12,13 @@
   overflow: hidden;
   border-radius: var(--radius-md);
   position: relative;
-  /* page padding дотор */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Wrapper to apply page padding */
-.heroWrap {
-  padding: 24px var(--page-pad) 0;
-  max-width: var(--page-max);
-  margin: 0 auto;
 }
 
 .imageWrap {
   position: relative;
   overflow: hidden;
-  min-height: 200px;
+  min-height: 220px;
+  background: #222;
 }
 
 .image {
@@ -32,9 +27,23 @@
   object-fit: cover;
   opacity: 0.85;
   transition: transform 0.4s;
+  position: absolute;
+  inset: 0;
 }
 
-.hero:hover .image { transform: scale(1.03); }
+.hero:hover .image {
+  transform: scale(1.03);
+}
+
+/* Зураг байхгүй үед placeholder */
+.imagePlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
 
 .info {
   background: #111;
@@ -43,6 +52,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .badge {
@@ -58,7 +68,7 @@
 }
 
 .title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   color: #fff;
   line-height: 1.25;
@@ -120,15 +130,21 @@
 /* ── Tablet ── */
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr 280px; }
-  .title { font-size: 18px; }
+  .title { font-size: 17px; }
   .info { padding: 20px 18px; }
 }
 
-/* ── Mobile: stack vertically ── */
+/* ── Mobile ── */
 @media (max-width: 600px) {
-  .hero { grid-template-columns: 1fr; min-height: unset; }
-  .imageWrap { aspect-ratio: 16/9; min-height: unset; }
-  .image { position: absolute; inset: 0; }
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+  .imageWrap {
+    aspect-ratio: 16/9;
+    min-height: unset;
+    position: relative;
+  }
   .info { padding: 18px 16px 20px; }
   .title { font-size: 17px; }
   .specs { grid-template-columns: repeat(2, 1fr); gap: 8px; }

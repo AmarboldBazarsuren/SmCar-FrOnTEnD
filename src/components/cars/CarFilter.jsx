@@ -3,16 +3,12 @@ import { BRANDS, FUEL_TYPES, TRANSMISSIONS } from '../../utils/constants';
 import styles from './CarFilter.module.css';
 
 export default function CarFilter({ filters, onChange, activeBrand }) {
-  const [expandedBrand, setExpandedBrand] = useState(activeBrand || null);
-
   const selectedBrand = BRANDS.find((b) => b.name === (filters.brand || activeBrand));
 
   const handleBrandClick = (brandName) => {
-    if (expandedBrand === brandName) {
-      setExpandedBrand(null);
+    if (filters.brand === brandName) {
       onChange({ brand: '', model: '' });
     } else {
-      setExpandedBrand(brandName);
       onChange({ brand: brandName, model: '' });
     }
   };
@@ -21,9 +17,43 @@ export default function CarFilter({ filters, onChange, activeBrand }) {
     onChange({ model: filters.model === model ? '' : model });
   };
 
+  // Fuel filter — apicars.info-д англи утга явуулна
+  // Translate: Монгол → API value
+  const FUEL_API = {
+    'Бензин':     'gasoline',
+    'Дизель':     'diesel',
+    'Цахилгаан':  'electric',
+    'Гибрид':     'hybrid',
+  };
+  const TRANS_API = {
+    'Автомат': 'automatic',
+    'Механик': 'manual',
+  };
+
+  const handleFuel = (label) => {
+    const apiVal = FUEL_API[label] || label;
+    onChange({ fuelType: filters.fuelType === apiVal ? '' : apiVal });
+  };
+
+  const handleTrans = (label) => {
+    const apiVal = TRANS_API[label] || label;
+    onChange({ transmission: filters.transmission === apiVal ? '' : apiVal });
+  };
+
+  // Active check helpers
+  const isFuelActive = (label) => {
+    const apiVal = FUEL_API[label] || label;
+    return filters.fuelType === apiVal || filters.fuelType === label;
+  };
+
+  const isTransActive = (label) => {
+    const apiVal = TRANS_API[label] || label;
+    return filters.transmission === apiVal || filters.transmission === label;
+  };
+
   return (
     <aside className={styles.sidebar}>
-      {/* Year filter */}
+      {/* Year */}
       <div className={styles.group}>
         <div className={styles.groupHeader}>
           <span>ҮЙЛДВЭРЛЭСЭН ОН</span>
@@ -54,7 +84,7 @@ export default function CarFilter({ filters, onChange, activeBrand }) {
         </div>
       </div>
 
-      {/* Brand filter */}
+      {/* Brand */}
       <div className={styles.group}>
         <div className={styles.groupHeader}>
           <span>ҮЙЛДВЭРЛЭГЧ{filters.brand ? `: ${filters.brand.toUpperCase()}` : ''}</span>
@@ -82,7 +112,7 @@ export default function CarFilter({ filters, onChange, activeBrand }) {
         </div>
       </div>
 
-      {/* Model filter — shown when brand selected */}
+      {/* Model — brand сонгосон үед харагдана */}
       {selectedBrand && (
         <div className={styles.group}>
           <div className={styles.groupHeader}>
@@ -111,18 +141,18 @@ export default function CarFilter({ filters, onChange, activeBrand }) {
         </div>
       )}
 
-      {/* Fuel type */}
+      {/* Fuel */}
       <div className={styles.group}>
         <div className={styles.groupHeader}>
           <span>ТҮЛШ</span>
           <button className={styles.collapseBtn}>∧</button>
         </div>
         <div className={styles.chipRow}>
-          {FUEL_TYPES.slice(1).map((f) => (
+          {['Бензин', 'Дизель', 'Цахилгаан', 'Гибрид'].map((f) => (
             <button
               key={f}
-              className={`${styles.chip} ${filters.fuelType === f ? styles.chipActive : ''}`}
-              onClick={() => onChange({ fuelType: filters.fuelType === f ? '' : f })}
+              className={`${styles.chip} ${isFuelActive(f) ? styles.chipActive : ''}`}
+              onClick={() => handleFuel(f)}
             >
               {f}
             </button>
@@ -137,17 +167,29 @@ export default function CarFilter({ filters, onChange, activeBrand }) {
           <button className={styles.collapseBtn}>∧</button>
         </div>
         <div className={styles.chipRow}>
-          {TRANSMISSIONS.slice(1).map((t) => (
+          {['Автомат', 'Механик'].map((t) => (
             <button
               key={t}
-              className={`${styles.chip} ${filters.transmission === t ? styles.chipActive : ''}`}
-              onClick={() => onChange({ transmission: filters.transmission === t ? '' : t })}
+              className={`${styles.chip} ${isTransActive(t) ? styles.chipActive : ''}`}
+              onClick={() => handleTrans(t)}
             >
               {t}
             </button>
           ))}
         </div>
       </div>
+
+      {/* Active filters summary */}
+      {(filters.fuelType || filters.transmission || filters.yearFrom || filters.yearTo) && (
+        <div className={styles.group}>
+          <button
+            className={styles.clearAllBtn}
+            onClick={() => onChange({ fuelType: '', transmission: '', yearFrom: '', yearTo: '', model: '', brand: '' })}
+          >
+            ✕ Бүх шүүлтүүр цэвэрлэх
+          </button>
+        </div>
+      )}
     </aside>
   );
 }

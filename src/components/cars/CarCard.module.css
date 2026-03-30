@@ -9,6 +9,7 @@
   cursor: pointer;
   text-decoration: none;
   color: inherit;
+  width: 100%;
 }
 
 .card:hover {
@@ -16,18 +17,21 @@
   transform: translateY(-2px);
 }
 
+/* Зураг: тогтмол aspect ratio */
 .imgWrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4 / 3;
   background: var(--bg-gray);
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.3s;
 }
 
@@ -41,31 +45,33 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: 28px;
   color: var(--text-muted);
 }
 
 .badgeNew {
   position: absolute;
-  top: 8px;
-  left: 8px;
+  top: 6px;
+  left: 6px;
   background: var(--accent-green);
   color: #fff;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 3px 10px;
+  padding: 2px 8px;
   border-radius: 4px;
 }
 
+/* Текст хэсэг */
 .body {
-  padding: 14px 16px 16px;
+  padding: 10px 12px 12px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  min-width: 0;
 }
 
 .title {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.35;
@@ -76,27 +82,32 @@
 }
 
 .meta {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 3px;
-  font-size: 13px;
+  font-size: 11px;
   color: var(--text-muted);
+  line-height: 1.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sep {
-  color: var(--border);
+  margin: 0 3px;
+  opacity: 0.5;
 }
 
 .basePrice {
-  font-size: 13px;
+  font-size: 11px;
   color: var(--text-muted);
-  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .totalPrice {
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--text-primary);
-  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

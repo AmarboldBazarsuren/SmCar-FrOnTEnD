@@ -36,9 +36,9 @@ const fetchWithCache = async (key, params) => {
 
 export default function HomePage() {
   const [lexusCars, setLexusCars] = useState([]);
-  const [mbCars, setMbCars]       = useState([]);
-  const [offroad, setOffroad]     = useState([]);
-  const [loading, setLoading]     = useState(true);
+  const [mbCars,    setMbCars]    = useState([]);
+  const [offroad,   setOffroad]   = useState([]);
+  const [loading,   setLoading]   = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,8 +70,8 @@ export default function HomePage() {
       <HomeBrandTable />
       <HomeFeaturedCar car={FEATURED_CAR} />
       <div className={styles.sections}>
-        <HomeCarSection title="LEXUS"                      cars={lexusCars} loading={loading} />
-        <HomeCarSection title="Mercedes-Benz"              cars={mbCars}    loading={loading} />
+        <HomeCarSection title="LEXUS"                       cars={lexusCars} loading={loading} />
+        <HomeCarSection title="Mercedes-Benz"               cars={mbCars}    loading={loading} />
         <HomeCarSection title="4 дугуй хөтлөгчтэй жийпүүд" cars={offroad}   loading={loading} />
       </div>
     </div>

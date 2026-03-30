@@ -1,146 +1,178 @@
-.gallery {
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-/* ── Main зураг ── */
-.mainWrap {
-  position: relative;
+  gap: 0;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: #1a1a1a;
-  width: 100%;
-  aspect-ratio: 16/10;
-  max-height: 520px;
 }
 
-.mainImg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  opacity: 0;
-  pointer-events: none;
-  background: #1a1a1a;
+/* ── Group (section) ── */
+.group {
+  border-bottom: 1px solid var(--border);
 }
 
-.mainImgActive {
-  opacity: 1;
-  pointer-events: auto;
+.group:last-child {
+  border-bottom: none;
 }
 
-.navBtn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 42px;
-  height: 42px;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  font-size: 22px;
+.groupHeader {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--bg-gray);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.collapseBtn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: var(--text-muted);
   cursor: pointer;
-  transition: background 0.15s;
-  z-index: 2;
+  padding: 0;
   line-height: 1;
+  font-family: var(--font);
 }
 
-.navBtn:hover {
-  background: rgba(0,0,0,0.75);
-}
-
-.prevBtn { left: 12px; }
-.nextBtn { right: 12px; }
-
-.counter {
-  position: absolute;
-  bottom: 12px;
-  right: 14px;
-  background: rgba(0,0,0,0.6);
+/* ── Active tag ── */
+.activeTag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 8px 12px 4px;
+  background: var(--primary);
   color: #fff;
   font-size: 13px;
   font-weight: 600;
-  padding: 4px 11px;
-  border-radius: 14px;
-  z-index: 2;
-}
-
-.placeholder {
-  aspect-ratio: 16/10;
-  max-height: 520px;
-  background: var(--bg-gray);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 16px;
-}
-
-/* ── Thumbnail strip — доор нь, горизонтаал ── */
-.thumbs {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  overflow-x: auto;
-  padding: 2px 2px 6px;
-  scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
-  -webkit-overflow-scrolling: touch;
-}
-
-.thumbs::-webkit-scrollbar { height: 4px; }
-.thumbs::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
-
-.thumb {
-  flex: 0 0 100px;
-  height: 70px;
-  border: 2px solid transparent;
+  padding: 5px 10px;
   border-radius: 6px;
-  overflow: hidden;
+}
+
+.removeTag {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
   cursor: pointer;
   padding: 0;
-  background: var(--bg-gray);
-  position: relative;
-  transition: border-color 0.15s, opacity 0.15s;
-  opacity: 0.65;
+  line-height: 1;
+  font-family: var(--font);
 }
 
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.removeTag:hover {
+  color: #fff;
 }
 
-.thumbActive {
+/* ── Brand / model checkbox list ── */
+.brandList {
+  padding: 6px 0;
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.checkItem:hover {
+  background: var(--bg-light);
+}
+
+.checkbox {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkLabel {
+  flex: 1;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.checkCount {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Year range row ── */
+.rangeRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+}
+
+.rangeSelect {
+  flex: 1;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-white);
+  font-size: 13px;
+  color: var(--text-primary);
+  padding: 0 8px;
+  outline: none;
+  cursor: pointer;
+  font-family: var(--font);
+}
+
+.rangeSelect:focus {
   border-color: var(--primary);
-  opacity: 1;
 }
 
-.thumb:hover { opacity: 1; }
-
-/* ── Responsive ── */
-@media (max-width: 900px) {
-  .mainWrap { max-height: 400px; }
+.rangeSep {
+  font-size: 13px;
+  color: var(--text-muted);
 }
 
-@media (max-width: 640px) {
-  .mainWrap {
-    aspect-ratio: 4/3;
-    max-height: 300px;
-  }
-  .thumb { flex: 0 0 72px; height: 52px; }
-  .navBtn { width: 34px; height: 34px; font-size: 18px; }
+/* ── Chip row (fuel, transmission) ── */
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 12px;
 }
 
-@media (max-width: 400px) {
-  .mainWrap { max-height: 240px; }
-  .thumb { flex: 0 0 60px; height: 44px; }
+.chip {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-white);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+
+.chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.chipActive {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
 }

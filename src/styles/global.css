@@ -30,7 +30,7 @@
 }
 
 html {
-  font-size: 16px; /* was 14px — now bigger */
+  font-size: 16px;
   scroll-behavior: smooth;
 }
 
@@ -42,48 +42,20 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; font-family: var(--font); }
+img { display: block; max-width: 100%; }
+select, input { font-family: var(--font); }
 
-button {
-  cursor: pointer;
-  border: none;
-  font-family: var(--font);
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-select, input {
-  font-family: var(--font);
-}
-
-/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-light); }
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 
-/* ── Responsive breakpoints ── */
-/* Mobile: < 640px */
-/* Tablet: 640px–1024px */
-/* Desktop: > 1024px */
-
 @media (max-width: 1024px) {
-  :root {
-    --page-pad: 20px;
-    --header-height: 60px;
-  }
+  :root { --page-pad: 20px; --header-height: 60px; }
 }
-
 @media (max-width: 640px) {
   html { font-size: 15px; }
-  :root {
-    --page-pad: 16px;
-    --header-height: 56px;
-  }
+  :root { --page-pad: 16px; --header-height: 56px; }
 }

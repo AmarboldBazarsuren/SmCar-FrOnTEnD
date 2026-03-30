@@ -10,15 +10,17 @@ export default function HomeFeaturedCar({ car }) {
     <div className={styles.heroWrap}>
       <div className={styles.hero}>
         <div className={styles.imageWrap}>
-          {car.thumbnail && (
+          {car.thumbnail ? (
             <img src={car.thumbnail} alt={car.title} className={styles.image} />
+          ) : (
+            <div className={styles.imagePlaceholder} />
           )}
         </div>
         <div className={styles.info}>
           <div className={styles.badge}>ОНЦЛОХ МАШИН</div>
           <h2 className={styles.title}>{car.title}</h2>
           {car.subtitle && (
-            <p className={styles.subtitle}>{car.subtitle} — Хамгийн хямдаар!</p>
+            <p className={styles.subtitle}>{car.subtitle}</p>
           )}
           <div className={styles.specs}>
             <div className={styles.specItem}>

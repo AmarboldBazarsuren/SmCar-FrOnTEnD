@@ -72,7 +72,7 @@ href={`https://www.encar.com/dc/dc_cardetailview.do?carid=${id}`}
                   ].map((label) => (
                     <div key={label} className={styles.diagItem}>
                       <span className={styles.diagLabel}>{label}</span>
-                      <span className={`${styles.diagStatus} ${styles.ok}`}>Норм</span>
+                      <span className={`${styles.diagStatus} ${styles.ok}`}>Хэвийн</span>
                     </div>
                   ))}
                 </div>

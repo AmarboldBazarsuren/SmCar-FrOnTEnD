@@ -3,8 +3,5 @@
 }
 
 .sections {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
   padding-bottom: 48px;
 }
