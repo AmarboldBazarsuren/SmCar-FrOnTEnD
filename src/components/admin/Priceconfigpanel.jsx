@@ -98,7 +98,7 @@ export default function PriceConfigPanel() {
           />
         </div>
         <div className={styles.infoBox}>
-          <strong>⚠️ Анхаар:</strong> Somang Trading болон Garid Trade-н тээврийн зардал ялгаатай байж болно. Тус бүрийн бодит зардалд тохируулна уу.
+          <strong>⚠️ Анхаар:</strong> Somang Trading тээврийн зардал ялгаатай байж болно. Тус бүрийн бодит зардалд тохируулна уу.
         </div>
       </div>
 

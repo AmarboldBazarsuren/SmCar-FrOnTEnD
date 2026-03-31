@@ -26,8 +26,8 @@ export default function Footer() {
             <div className={styles.linkGroup}>
               <h4 className={styles.groupTitle}>Үйлчилгээ</h4>
               <Link to="/cars" className={styles.link}>Машин захиалах</Link>
-              <Link to="/guide" className={styles.link}>Захиалга өгөх заавар</Link>
-              <Link to="/orders" className={styles.link}>Захиалагчид</Link>
+              {/* <Link to="/guide" className={styles.link}>Захиалга өгөх заавар</Link> */}
+              {/* <Link to="/orders" className={styles.link}>Захиалагчид</Link> */}
               <Link to="/travel-cars" className={styles.link}>Аялалын машин</Link>
             </div>
             <div className={styles.linkGroup}>

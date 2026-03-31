@@ -17,8 +17,8 @@ export default function Header() {
 
   const navLinks = [
     { to: '/', label: 'Нүүр хуудас', end: true },
-    { to: '/orders', label: 'Захиалагчид' },
-    { to: '/guide', label: 'Захиалга өгөх заавар' },
+    // { to: '/orders', label: 'Захиалагчид' },
+    // { to: '/guide', label: 'Захиалга өгөх заавар' },
   ];
 
   return (
@@ -39,12 +39,12 @@ export default function Header() {
                 {n.label}
               </NavLink>
             ))}
-            <button className={styles.link}>Туслах цэс <span className={styles.chevron}>▾</span></button>
+            {/* <button className={styles.link}>Туслах цэс <span className={styles.chevron}>▾</span></button> */}
           </nav>
 
        
 
-          <button className={styles.menuBtn} onClick={() => setMenuOpen(o => !o)} aria-label="Цэс">
+          <button className={styles.menuBtn} onClick={() => setMenuOpen(o => !o)} aria-label="">
             <span className={`${styles.bar} ${menuOpen ? styles.bar1Open : ''}`} />
             <span className={`${styles.bar} ${menuOpen ? styles.bar2Open : ''}`} />
             <span className={`${styles.bar} ${menuOpen ? styles.bar3Open : ''}`} />
@@ -57,7 +57,7 @@ export default function Header() {
         <div className={styles.overlay} onClick={() => setMenuOpen(false)}>
           <div className={styles.drawer} onClick={e => e.stopPropagation()}>
             <div className={styles.drawerHeader}>
-              <span className={styles.drawerTitle}>Цэс</span>
+              {/* <span className={styles.drawerTitle}>Цэс</span> */}
               <button className={styles.closeBtn} onClick={() => setMenuOpen(false)}>✕</button>
             </div>
             {navLinks.map((n) => (
