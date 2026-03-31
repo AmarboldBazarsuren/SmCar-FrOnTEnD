@@ -1,42 +1,52 @@
-// src/components/home/HomeListingSection.jsx
+// src/components/home/HomeListingSection.jsx  ← ШИНЭ файл
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { formatMNT, formatKRW, formatKm } from '../../utils/format';
 import styles from './HomeListingSection.module.css';
 
 function ListingCard({ item }) {
-  const thumbnail = item.images?.[0] || '';
-  const imgCount  = item.images?.length || 0;
-  const mntPrice  = item.krwPrice ? Math.round(item.krwPrice * 2.4) : null;
+  const imgSrc = item.imageUrl || (Array.isArray(item.images) ? item.images[0] : null);
+  const mntPrice = item.krwPrice ? Math.round(item.krwPrice * 2.4) : null;
 
-  return (
-    <Link to={`/listing-detail/${item._id}`} className={styles.cardLink}>
-      <div className={styles.card}>
-        <div className={styles.imgWrap}>
-          {thumbnail ? (
-            <img src={thumbnail} alt={item.title} className={styles.img} loading="lazy" />
-          ) : (
-            <div className={styles.imgPlaceholder}><span>📷</span></div>
-          )}
-          <span className={styles.badge}>Зар</span>
-          {imgCount > 1 && (
-            <span className={styles.imgCount}>📷 {imgCount}</span>
-          )}
-        </div>
-        <div className={styles.body}>
-          <h3 className={styles.title}>{item.title}</h3>
-          <div className={styles.meta}>
-            {item.year     && <span>{item.year}</span>}
-            {item.mileage  != null && <><span className={styles.sep}>—</span><span>{formatKm(item.mileage)}</span></>}
-            {item.fuelType && <><span className={styles.sep}>—</span><span>{item.fuelType}</span></>}
-            {item.cc       && <><span className={styles.sep}>—</span><span>{item.cc}сс</span></>}
-          </div>
-          {item.krwPrice && (
-            <p className={styles.basePrice}>Үндсэн үнэ: {formatKRW(item.krwPrice)}</p>
-          )}
-          {mntPrice && <p className={styles.totalPrice}>{formatMNT(mntPrice)}</p>}
-        </div>
+  const cardContent = (
+    <div className={styles.card}>
+      <div className={styles.imgWrap}>
+        {imgSrc ? (
+          <img src={imgSrc} alt={item.title} className={styles.img} loading="lazy" />
+        ) : (
+          <div className={styles.imgPlaceholder}><span>📷</span></div>
+        )}
+        <span className={styles.badge}>Зар</span>
       </div>
+      <div className={styles.body}>
+        <h3 className={styles.title}>{item.title}</h3>
+        <div className={styles.meta}>
+          {item.year     && <span>{item.year}</span>}
+          {item.mileage  != null && <><span className={styles.sep}>—</span><span>{formatKm(item.mileage)}</span></>}
+          {item.fuelType && <><span className={styles.sep}>—</span><span>{item.fuelType}</span></>}
+          {item.cc       && <><span className={styles.sep}>—</span><span>{item.cc}сс</span></>}
+        </div>
+        {item.krwPrice && (
+          <p className={styles.basePrice}>Үндсэн үнэ: {formatKRW(item.krwPrice)}</p>
+        )}
+        {mntPrice && (
+          <p className={styles.totalPrice}>{formatMNT(mntPrice)}</p>
+        )}
+      </div>
+    </div>
+  );
+
+  // Хэрэв Encar link байвал тэр руу, үгүй бол listing detail page руу
+  if (item.linkUrl && item.linkUrl.startsWith('http')) {
+    return (
+      <a href={item.linkUrl} target="_blank" rel="noopener noreferrer" className={styles.cardLink}>
+        {cardContent}
+      </a>
+    );
+  }
+  return (
+    <Link to={item.linkUrl || '#'} className={styles.cardLink}>
+      {cardContent}
     </Link>
   );
 }
