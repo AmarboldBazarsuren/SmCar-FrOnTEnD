@@ -27,7 +27,7 @@ export default function Header() {
         <div className={styles.inner}>
           <Link to="/" className={styles.logo}>
          
-<img src="/logo_last.png" alt="Garid Trade" height="60" />
+<img src="/logo_last.png" alt="Somang Trade" height="60" />
             
           </Link>
 
