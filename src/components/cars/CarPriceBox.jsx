@@ -24,8 +24,8 @@ export default function CarPriceBox({ priceBreakdown, onOrder }) {
     <div className={styles.box}>
       <div className={styles.rows}>
         <div className={styles.row}>
-          <span className={styles.label}>VIN:</span>
-          <span className={styles.value}>N/A</span>
+          {/* <span className={styles.label}>VIN:</span>
+          <span className={styles.value}>N/A</span> */}
         </div>
         <div className={styles.row}>
           <span className={styles.label}>Үндсэн үнэ:</span>

@@ -3,15 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import { BRANDS } from '../../utils/constants';
 import styles from './HomeBrandTable.module.css';
 
+const COLS = 4;
+const DEFAULT_ROWS = 3; // 3 мөр = 12 брэнд харуулна
+
 export default function HomeBrandTable() {
   const [expanded, setExpanded]       = useState(false);
   const [activeBrand, setActiveBrand] = useState(null);
   const navigate = useNavigate();
 
-  const visibleBrands = expanded ? BRANDS : BRANDS.slice(0, 12);
+  const visibleBrands = expanded ? BRANDS : BRANDS.slice(0, DEFAULT_ROWS * COLS);
+
+  // Брэндүүдийг COLS-аар мөрт хувааx
+  const rows = [];
+  for (let i = 0; i < visibleBrands.length; i += COLS) {
+    rows.push(visibleBrands.slice(i, i + COLS));
+  }
 
   const handleBrandClick = (brand) => {
-    // Загвар байгаа брэнд дээр дарахад accordion нээнэ
     if (brand.models && brand.models.length > 0) {
       setActiveBrand(activeBrand === brand.name ? null : brand.name);
     } else {
@@ -19,20 +27,24 @@ export default function HomeBrandTable() {
     }
   };
 
+  const handleToggleExpand = () => {
+    setExpanded((prev) => {
+      const next = !prev;
+      // Нуух үед accordion хааx
+      if (!next) setActiveBrand(null);
+      return next;
+    });
+  };
+
   const handleModelClick = (e, brandName, model) => {
     e.stopPropagation();
     navigate(`/cars/${encodeURIComponent(brandName)}/${encodeURIComponent(model)}`);
   };
 
-  // Активэ брэндийн загваруудыг 4 баганаар харуулах
   const renderModels = (brand) => {
-    const cols = 4;
-    const rows = Math.ceil(brand.models.length / cols);
-    // models-г 4 баганат хэлбэрт хувааx
-    const columns = Array.from({ length: cols }, (_, ci) =>
-      brand.models.filter((_, mi) => mi % cols === ci)
+    const columns = Array.from({ length: COLS }, (_, ci) =>
+      brand.models.filter((_, mi) => mi % COLS === ci)
     );
-
     return (
       <div className={styles.modelPanel}>
         <div className={styles.modelGrid}>
@@ -56,35 +68,40 @@ export default function HomeBrandTable() {
 
   return (
     <div className={styles.section}>
-      <h2 className={styles.title}>Солонгос улсаас автомашин захиалга</h2>
+      <h2 className={styles.title}>Хүссэн машинаа Солонгосоос захиалцгаая</h2>
 
       <div className={styles.table}>
-        {/* Брэндүүд + accordion */}
-        <div className={styles.grid}>
-          {visibleBrands.map((brand) => (
-            <React.Fragment key={brand.name}>
-              <button
-                className={`${styles.brandItem} ${activeBrand === brand.name ? styles.brandActive : ''}`}
-                onClick={() => handleBrandClick(brand)}
-              >
-                <span className={styles.brandName}>{brand.name}</span>
-                <span className={styles.brandCount}>{brand.count.toLocaleString()}</span>
-              </button>
+        {rows.map((row, rowIdx) => {
+          const activeInRow = row.find((b) => b.name === activeBrand);
 
-              {/* Accordion: брэндийн дараа шууд нээгдэнэ — 4 нүдний дараа */}
-              {activeBrand === brand.name && (
+          return (
+            <React.Fragment key={rowIdx}>
+              <div className={styles.grid}>
+                {row.map((brand) => (
+                  <button
+                    key={brand.name}
+                    className={`${styles.brandItem} ${activeBrand === brand.name ? styles.brandActive : ''}`}
+                    onClick={() => handleBrandClick(brand)}
+                  >
+                    <span className={styles.brandName}>{brand.name}</span>
+                    <span className={styles.brandCount}>{brand.count.toLocaleString()}</span>
+                  </button>
+                ))}
+                {Array.from({ length: COLS - row.length }).map((_, i) => (
+                  <div key={`empty-${i}`} className={styles.emptyCell} />
+                ))}
+              </div>
+
+              {activeInRow && (
                 <div className={styles.accordionRow}>
-                  {renderModels(brand)}
+                  {renderModels(activeInRow)}
                 </div>
               )}
             </React.Fragment>
-          ))}
-        </div>
+          );
+        })}
 
-        <button
-          className={styles.expandBtn}
-          onClick={() => setExpanded((v) => !v)}
-        >
+        <button className={styles.expandBtn} onClick={handleToggleExpand}>
           {expanded ? 'Нуух' : 'Бүгдийг харах'}
           <span className={styles.chevron}>{expanded ? '∧' : '∨'}</span>
         </button>

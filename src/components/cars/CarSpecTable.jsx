@@ -13,7 +13,7 @@ export default function CarSpecTable({ carInfo }) {
     { label: 'Түлш',          value: carInfo.fuelType },
     { label: 'Өнгө',          value: carInfo.color },
     { label: 'Хүч',           value: carInfo.power ? `${carInfo.power}hp` : null },
-    { label: 'Дугаар',        value: carInfo.vehicleNo },
+    // { label: 'Дугаар',        value: carInfo.vehicleNo },
   ].filter((s) => s.value);
 
   return (

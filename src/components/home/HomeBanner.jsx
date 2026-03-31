@@ -20,7 +20,7 @@ export default function HomeBanner() {
   return (
     <div className={styles.banner}>
       <div className={styles.overlay}>
-        <p className={styles.tagline}>Сэтгэлд сэвгүй унаа!</p>
+        <p className={styles.tagline}>Машины төрөл болон загвараа сонгоно уу.</p>
       </div>
       <div className={styles.searchBar}>
         <div className={styles.selectWrap}>

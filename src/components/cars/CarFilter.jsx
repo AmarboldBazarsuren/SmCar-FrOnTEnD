@@ -148,7 +148,7 @@ export default function CarFilter({ filters, onChange, activeBrand }) {
           <button className={styles.collapseBtn}>∧</button>
         </div>
         <div className={styles.chipRow}>
-          {['Бензин', 'Дизель', 'Цахилгаан', 'Гибрид'].map((f) => (
+          {['Бензин', 'Дизель', 'Цахилгаан', 'Hybrid'].map((f) => (
             <button
               key={f}
               className={`${styles.chip} ${isFuelActive(f) ? styles.chipActive : ''}`}

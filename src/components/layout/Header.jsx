@@ -26,11 +26,9 @@ export default function Header() {
       <header className={styles.header}>
         <div className={styles.inner}>
           <Link to="/" className={styles.logo}>
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <rect width="28" height="28" rx="6" fill="#111827"/>
-              <text x="5" y="21" fontSize="16" fontWeight="800" fill="white" fontFamily="Manrope">G</text>
-            </svg>
-            <span className={styles.logoText}>GARID TRADE</span>
+         
+<img src="/logo_last.png" alt="Garid Trade" height="60" />
+            
           </Link>
 
           {/* Desktop nav */}
@@ -44,10 +42,7 @@ export default function Header() {
             <button className={styles.link}>Туслах цэс <span className={styles.chevron}>▾</span></button>
           </nav>
 
-          <Link to="/travel-cars" className={styles.ctaBtn}>
-            <span className={styles.ctaIcon}>🌿</span>
-            <span className={styles.ctaText}>Аялалын машин</span>
-          </Link>
+       
 
           <button className={styles.menuBtn} onClick={() => setMenuOpen(o => !o)} aria-label="Цэс">
             <span className={`${styles.bar} ${menuOpen ? styles.bar1Open : ''}`} />
@@ -73,9 +68,7 @@ export default function Header() {
               </NavLink>
             ))}
             <div className={styles.drawerDivider} />
-            <Link to="/travel-cars" className={styles.drawerCta} onClick={() => setMenuOpen(false)}>
-              🌿 Аялалын машин
-            </Link>
+            
           </div>
         </div>
       )}

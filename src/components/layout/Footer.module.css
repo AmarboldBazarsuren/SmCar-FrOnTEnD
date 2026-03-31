@@ -1,0 +1,130 @@
+.footer {
+  background: #0f172a;
+  color: rgba(255,255,255,0.75);
+  margin-top: 0;
+}
+
+.inner {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 48px;
+  padding: 52px 0 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.logo { display: inline-block; }
+
+.logoImg {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.brandDesc {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.55);
+}
+
+.phones {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Links */
+.links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.linkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.groupTitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 4px;
+}
+
+.link {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.link:hover { color: #fff; }
+
+.info {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.65);
+}
+
+/* Bottom */
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.35);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.powered {
+  color: rgba(255,255,255,0.25);
+}
+
+@media (max-width: 900px) {
+  .top {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 40px 0 32px;
+  }
+  .links {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 400px) {
+  .links { grid-template-columns: 1fr; }
+}

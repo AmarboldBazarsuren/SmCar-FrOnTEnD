@@ -13,7 +13,7 @@ export default function CarSortBar({ total, activeSort, onSort, onClearFilters }
         )}
       </div>
       <div className={styles.right}>
-        <span className={styles.total}>Нийт: <b>{total?.toLocaleString()}</b> машин</span>
+        {/* <span className={styles.total}>Нийт: <b>{total?.toLocaleString()}</b> машин</span> */}
         <div className={styles.sortBtns}>
           {SORT_OPTIONS.map((opt) => (
             <button

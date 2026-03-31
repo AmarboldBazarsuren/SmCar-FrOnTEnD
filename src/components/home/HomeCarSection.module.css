@@ -59,16 +59,18 @@
   display: none;
 }
 
+/* 4 карт харагдахаар: (container - padding*2 - gap*3) / 4 */
 .cardWrap {
-  flex: 0 0 260px;
-  flex-shrink: 0;
-  min-width: 0;
+  flex: 0 0 calc(25% - 12px);
+  min-width: 280px;
+  max-width: 340px;
 }
 
 .skeleton {
-  flex: 0 0 260px;
-  flex-shrink: 0;
-  height: 320px;
+  flex: 0 0 calc(25% - 12px);
+  min-width: 280px;
+  max-width: 340px;
+  height: 360px;
   border-radius: var(--radius-md);
   background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
   background-size: 200% 100%;
@@ -80,17 +82,22 @@
   100% { background-position: -200% 0; }
 }
 
-@media (max-width: 900px) {
-  .cardWrap { flex: 0 0 220px; }
-  .skeleton { flex: 0 0 220px; height: 280px; }
+@media (max-width: 1100px) {
+  .cardWrap  { flex: 0 0 calc(33.333% - 11px); min-width: 240px; }
+  .skeleton  { flex: 0 0 calc(33.333% - 11px); min-width: 240px; height: 320px; }
+}
+
+@media (max-width: 768px) {
+  .cardWrap  { flex: 0 0 calc(50% - 8px); min-width: 200px; }
+  .skeleton  { flex: 0 0 calc(50% - 8px); min-width: 200px; height: 280px; }
 }
 
 @media (max-width: 560px) {
-  .section  { padding-top: 20px; }
-  .header   { padding: 0 16px; }
-  .track    { padding: 4px 16px 12px; gap: 12px; }
-  .title    { font-size: 16px; }
-  .cardWrap { flex: 0 0 160px; }
-  .skeleton { flex: 0 0 160px; height: 230px; }
-  .arrows   { display: none; }
+  .section   { padding-top: 20px; }
+  .header    { padding: 0 16px; }
+  .track     { padding: 4px 16px 12px; gap: 12px; }
+  .title     { font-size: 16px; }
+  .cardWrap  { flex: 0 0 200px; min-width: unset; max-width: unset; }
+  .skeleton  { flex: 0 0 200px; min-width: unset; height: 260px; }
+  .arrows    { display: none; }
 }

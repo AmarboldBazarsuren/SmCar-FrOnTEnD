@@ -19,10 +19,16 @@
   overflow: hidden;
 }
 
-/* 4 баганат grid */
+/* Нэг мөр — 4 багана */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Сүүлийн grid мөр accordion-гүй үед border-bottom байхгүй байх */
+.grid:last-of-type {
+  border-bottom: none;
 }
 
 .brandItem {
@@ -33,12 +39,12 @@
   background: none;
   border: none;
   border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
   cursor: pointer;
   text-align: left;
   transition: background 0.12s;
   font-family: var(--font);
   gap: 8px;
+  min-height: 52px;
 }
 
 .brandItem:hover {
@@ -51,8 +57,14 @@
 }
 
 /* 4-р багана border-right байхгүй */
-.brandItem:nth-child(4n) {
+.brandItem:last-of-type,
+.emptyCell:last-of-type {
   border-right: none;
+}
+
+/* Хоосон нүд */
+.emptyCell {
+  border-right: 1px solid var(--border);
 }
 
 .brandName {
@@ -68,9 +80,8 @@
   flex-shrink: 0;
 }
 
-/* Accordion row — grid-ийн бүтэн өргөнд span хийнэ */
+/* Accordion row — мөрийн доор шууд */
 .accordionRow {
-  grid-column: 1 / -1;
   border-bottom: 1px solid var(--border);
   background: var(--bg-light);
 }
@@ -150,9 +161,6 @@
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .brandItem:nth-child(4n) {
-    border-right: 1px solid var(--border);
-  }
   .brandItem:nth-child(2n) {
     border-right: none;
   }
@@ -169,9 +177,6 @@
   .title {
     font-size: 17px;
   }
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .brandName {
     font-size: 13px;
   }
@@ -181,4 +186,4 @@
   .modelGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
+} 

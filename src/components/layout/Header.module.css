@@ -193,7 +193,19 @@
   text-decoration: none;
   justify-content: center;
 }
+.logoImg {
+  height: 44px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+@media (max-width: 1024px) {
+  .logoImg { height: 40px; }
+}
 
+@media (max-width: 640px) {
+  .logoImg { height: 34px; }
+}
 /* ── Breakpoints ── */
 @media (max-width: 960px) {
   .nav { display: none; }

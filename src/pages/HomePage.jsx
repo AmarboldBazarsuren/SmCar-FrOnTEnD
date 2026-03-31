@@ -3,12 +3,15 @@ import HomeBanner from '../components/home/HomeBanner';
 import HomeBrandTable from '../components/home/HomeBrandTable';
 import HomeFeaturedCar from '../components/home/HomeFeaturedCar';
 import HomeCarSection from '../components/home/HomeCarSection';
-import { getCars } from '../services/api';
+import HomeServices from '../components/home/HomeServices';   // ← НЭМСЭН
+import { getCars, getCarById } from '../services/api';
 import { translateCar } from '../utils/translate';
 import styles from './HomePage.module.css';
 
-const FEATURED_CAR = {
-  id: '41739536',
+const FEATURED_ID = '41739536';
+
+const FEATURED_CAR_BASE = {
+  id: FEATURED_ID,
   title: 'Mercedes-Benz E-Class E300 Avantgarde',
   year: 2019,
   mileage: 32085,
@@ -35,31 +38,47 @@ const fetchWithCache = async (key, params) => {
 };
 
 export default function HomePage() {
-  const [lexusCars, setLexusCars] = useState([]);
-  const [mbCars,    setMbCars]    = useState([]);
-  const [offroad,   setOffroad]   = useState([]);
-  const [loading,   setLoading]   = useState(true);
+  const [featuredCar, setFeaturedCar] = useState(FEATURED_CAR_BASE);
+  const [bmwCars,     setBmwCars]     = useState([]);
+  const [mbCars,      setMbCars]      = useState([]);
+  const [offroad,     setOffroad]     = useState([]);
+  const [loading,     setLoading]     = useState(true);
 
   useEffect(() => {
     let cancelled = false;
+
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const [lx, mb, or4] = await Promise.allSettled([
-          fetchWithCache('lexus', { brand: 'Lexus',         limit: 8 }),
-          fetchWithCache('mb',    { brand: 'Mercedes-Benz', limit: 8 }),
-          fetchWithCache('jeep',  { brand: 'Jeep',          limit: 8 }),
+        const [featuredRes, bmw, mb, or4] = await Promise.allSettled([
+          getCarById(FEATURED_ID),
+          fetchWithCache('bmw',  { brand: 'BMW',           limit: 8 }),
+          fetchWithCache('mb',   { brand: 'Mercedes-Benz', limit: 8 }),
+          fetchWithCache('jeep', { brand: 'Jeep',          limit: 8 }),
         ]);
+
         if (cancelled) return;
-        if (lx.status  === 'fulfilled') setLexusCars(extractCars(lx.value).map(translateCar));
-        if (mb.status  === 'fulfilled') setMbCars(extractCars(mb.value).map(translateCar));
-        if (or4.status === 'fulfilled') setOffroad(extractCars(or4.value).map(translateCar));
+
+        if (featuredRes.status === 'fulfilled') {
+          const carInfo = featuredRes.value?.data?.carInfo;
+          if (carInfo?.thumbnail || carInfo?.images?.[0]) {
+            setFeaturedCar((prev) => ({
+              ...prev,
+              thumbnail: carInfo.thumbnail || carInfo.images[0],
+            }));
+          }
+        }
+
+        if (bmw.status  === 'fulfilled') setBmwCars(extractCars(bmw.value).map(translateCar));
+        if (mb.status   === 'fulfilled') setMbCars(extractCars(mb.value).map(translateCar));
+        if (or4.status  === 'fulfilled') setOffroad(extractCars(or4.value).map(translateCar));
       } catch (e) {
         console.error('HomePage fetch error:', e);
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
+
     fetchAll();
     return () => { cancelled = true; };
   }, []);
@@ -68,12 +87,13 @@ export default function HomePage() {
     <div className={styles.page}>
       <HomeBanner />
       <HomeBrandTable />
-      <HomeFeaturedCar car={FEATURED_CAR} />
+      <HomeFeaturedCar car={featuredCar} />
       <div className={styles.sections}>
-        <HomeCarSection title="LEXUS"                       cars={lexusCars} loading={loading} />
-        <HomeCarSection title="Mercedes-Benz"               cars={mbCars}    loading={loading} />
-        <HomeCarSection title="4 дугуй хөтлөгчтэй жийпүүд" cars={offroad}   loading={loading} />
+        <HomeCarSection title="BMW"                         cars={bmwCars}  loading={loading} />
+        <HomeCarSection title="Mercedes-Benz"               cars={mbCars}   loading={loading} />
+        <HomeCarSection title="4 дугуй хөтлөгчтэй жийпүүд" cars={offroad}  loading={loading} />
       </div>
+      <HomeServices />  {/* ← НЭМСЭН */}
     </div>
   );
 }
