@@ -1,15 +1,18 @@
+// src/pages/admin/AdminDashboard.jsx  ← одоогийн файлыг ЭНЭ-ээр солино
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminMe, adminLogout } from '../../services/api';
 import BannerManager     from '../../components/admin/BannerManager';
 import PriceConfigPanel  from '../../components/admin/PriceConfigPanel';
 import TaxConfigPanel    from '../../components/admin/TaxConfigPanel';
+import CarListingManager from '../../components/admin/CarListingManager';   // ← ШИНЭ
 import styles from './AdminDashboard.module.css';
 
 const TABS = [
-  { id: 'banners',  icon: '🖼',  label: 'Баннер удирдлага' },
-  { id: 'price',    icon: '💱',  label: 'Ханш & Шимтгэл' },
-  { id: 'tax',      icon: '📊',  label: 'Татварын тохиргоо' },
+  { id: 'banners',   icon: '🖼',  label: 'Баннер удирдлага' },
+  { id: 'listings',  icon: '🚗',  label: 'Машины зар' },          // ← ШИНЭ
+  { id: 'price',     icon: '💱',  label: 'Ханш & Шимтгэл' },
+  { id: 'tax',       icon: '📊',  label: 'Татварын тохиргоо' },
 ];
 
 export default function AdminDashboard() {
@@ -34,7 +37,6 @@ export default function AdminDashboard() {
 
   return (
     <div className={styles.shell}>
-      {/* Sidebar */}
       <aside className={styles.sidebar}>
         <div className={styles.sideTop}>
           <div className={styles.brand}>
@@ -55,9 +57,7 @@ export default function AdminDashboard() {
           </nav>
         </div>
         <div className={styles.sideBottom}>
-          <a href="/" target="_blank" className={styles.viewSite}>
-            ↗ Сайт үзэх
-          </a>
+          <a href="/" target="_blank" className={styles.viewSite}>↗ Сайт үзэх</a>
           <div className={styles.userRow}>
             <div className={styles.avatar}>{username[0]?.toUpperCase()}</div>
             <div className={styles.userInfo}>
@@ -69,15 +69,15 @@ export default function AdminDashboard() {
         </div>
       </aside>
 
-      {/* Main content */}
       <main className={styles.main}>
         <div className={styles.contentHeader}>
           <h1 className={styles.pageTitle}>{TABS.find((t) => t.id === tab)?.label}</h1>
         </div>
         <div className={styles.content}>
-          {tab === 'banners' && <BannerManager />}
-          {tab === 'price'   && <PriceConfigPanel />}
-          {tab === 'tax'     && <TaxConfigPanel />}
+          {tab === 'banners'  && <BannerManager />}
+          {tab === 'listings' && <CarListingManager />}   {/* ← ШИНЭ */}
+          {tab === 'price'    && <PriceConfigPanel />}
+          {tab === 'tax'      && <TaxConfigPanel />}
         </div>
       </main>
     </div>

@@ -1,10 +1,12 @@
+// src/pages/HomePage.jsx  ← одоогийн файлыг ЭНЭ-ээр солино
 import React, { useEffect, useState } from 'react';
 import HomeBanner        from '../components/home/HomeBanner';
 import HomeBrandTable    from '../components/home/HomeBrandTable';
 import HomeBannerCarousel from '../components/home/HomeBannerCarousel';
 import HomeCarSection    from '../components/home/HomeCarSection';
+import HomeListingSection from '../components/home/HomeListingSection';   // ← ШИНЭ
 import HomeServices      from '../components/home/HomeServices';
-import { getCars, getCarById } from '../services/api';
+import { getCars, getCarById, getListings } from '../services/api';
 import { translateCar } from '../utils/translate';
 import styles from './HomePage.module.css';
 
@@ -42,6 +44,7 @@ export default function HomePage() {
   const [bmwCars,     setBmwCars]     = useState([]);
   const [mbCars,      setMbCars]      = useState([]);
   const [offroad,     setOffroad]     = useState([]);
+  const [adminListings, setAdminListings] = useState([]);  // ← ШИНЭ
   const [loading,     setLoading]     = useState(true);
 
   useEffect(() => {
@@ -50,11 +53,12 @@ export default function HomePage() {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const [featuredRes, bmw, mb, or4] = await Promise.allSettled([
+        const [featuredRes, bmw, mb, or4, listings] = await Promise.allSettled([
           getCarById(FEATURED_ID),
           fetchWithCache('bmw',  { brand: 'BMW',           limit: 8 }),
           fetchWithCache('mb',   { brand: 'Mercedes-Benz', limit: 8 }),
           fetchWithCache('jeep', { brand: 'Jeep',          limit: 8 }),
+          getListings({ limit: 20 }),                         // ← ШИНЭ
         ]);
 
         if (cancelled) return;
@@ -69,9 +73,12 @@ export default function HomePage() {
           }
         }
 
-        if (bmw.status  === 'fulfilled') setBmwCars(extractCars(bmw.value).map(translateCar));
-        if (mb.status   === 'fulfilled') setMbCars(extractCars(mb.value).map(translateCar));
-        if (or4.status  === 'fulfilled') setOffroad(extractCars(or4.value).map(translateCar));
+        if (bmw.status === 'fulfilled')      setBmwCars(extractCars(bmw.value).map(translateCar));
+        if (mb.status  === 'fulfilled')      setMbCars(extractCars(mb.value).map(translateCar));
+        if (or4.status === 'fulfilled')      setOffroad(extractCars(or4.value).map(translateCar));
+        if (listings.status === 'fulfilled') {
+          setAdminListings(listings.value?.data || []);       // ← ШИНЭ
+        }
       } catch (e) {
         console.error('HomePage fetch error:', e);
       } finally {
@@ -87,11 +94,14 @@ export default function HomePage() {
     <div className={styles.page}>
       <HomeBanner />
       <HomeBrandTable />
-
-      {/* Баннер + онцлох машин нэг carousel болгон нэгтгэв */}
       <HomeBannerCarousel featuredCar={featuredCar} />
 
       <div className={styles.sections}>
+        {/* Admin-аас нэмсэн зарууд — BMW-ийн дээр */}
+        {adminListings.length > 0 && (
+          <HomeListingSection listings={adminListings} loading={loading} />
+        )}
+
         <HomeCarSection title="BMW"                         cars={bmwCars}  loading={loading} />
         <HomeCarSection title="Mercedes-Benz"               cars={mbCars}   loading={loading} />
         <HomeCarSection title="4 дугуй хөтлөгчтэй жийпүүд" cars={offroad}  loading={loading} />

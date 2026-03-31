@@ -1,9 +1,11 @@
+// src/App.jsx  ← одоогийн файлыг ЭНЭ-ээр солино
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout        from './components/layout/Layout';
-import HomePage      from './pages/HomePage';
-import CarListPage   from './pages/CarListPage';
-import CarDetailPage from './pages/CarDetailPage';
+import Layout           from './components/layout/Layout';
+import HomePage         from './pages/HomePage';
+import CarListPage      from './pages/CarListPage';
+import CarDetailPage    from './pages/CarDetailPage';
+import ListingDetailPage from './pages/ListingDetailPage';   // ← ШИНЭ
 import AdminLoginPage   from './pages/admin/AdminLoginPage';
 import AdminDashboard   from './pages/admin/AdminDashboard';
 
@@ -30,7 +32,7 @@ export default function App() {
     <ErrorBoundary>
       <BrowserRouter>
         <Routes>
-          {/* ── Admin (layout-гүй) ── */}
+          {/* ── Admin ── */}
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin"       element={<AdminDashboard />} />
           <Route path="/admin/*"     element={<AdminDashboard />} />
@@ -42,6 +44,7 @@ export default function App() {
             <Route path="cars/:brand"        element={<CarListPage />} />
             <Route path="cars/:brand/:model" element={<CarListPage />} />
             <Route path="listing/:id"        element={<CarDetailPage />} />
+            <Route path="listing-detail/:id" element={<ListingDetailPage />} />  {/* ← ШИНЭ */}
           </Route>
         </Routes>
       </BrowserRouter>

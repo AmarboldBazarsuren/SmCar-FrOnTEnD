@@ -1,3 +1,4 @@
+// src/pages/CarDetailPage.jsx  ← одоогийн файлыг ЭНЭ-ээр солино
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import useCarDetail from '../hooks/useCarDetail';
@@ -5,6 +6,7 @@ import CarImageGallery from '../components/cars/CarImageGallery';
 import CarPriceBox from '../components/cars/CarPriceBox';
 import CarSpecTable from '../components/cars/CarSpecTable';
 import CarBreadcrumb from '../components/cars/CarBreadcrumb';
+import OrderModal from '../components/cars/OrderModal';          // ← ШИНЭ
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorMessage from '../components/common/ErrorMessage';
 import { translateCar } from '../utils/translate';
@@ -13,22 +15,22 @@ import styles from './CarDetailPage.module.css';
 export default function CarDetailPage() {
   const { id } = useParams();
   const { data, loading, error } = useCarDetail(id);
-  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [showModal, setShowModal] = useState(false);            // ← ШИНЭ
 
   if (loading) return <LoadingSpinner size="lg" text="Машины мэдээлэл татаж байна..." />;
   if (error)   return <ErrorMessage message={error} />;
   if (!data)   return null;
 
-  // carInfo талбаруудыг Монголоор орчуулах
   const carInfo = translateCar(data.carInfo);
   const { priceBreakdown } = data;
 
   const title  = carInfo?.title || `Машин #${id}`;
-const images = Array.isArray(carInfo?.images) && carInfo.images.length > 0
-  ? carInfo.images
-  : carInfo?.thumbnail
-  ? [carInfo.thumbnail]
-  : [];
+  const images = Array.isArray(carInfo?.images) && carInfo.images.length > 0
+    ? carInfo.images
+    : carInfo?.thumbnail
+    ? [carInfo.thumbnail]
+    : [];
+
   const breadcrumbs = [
     { label: 'Нүүр хуудас', href: '/' },
     carInfo?.brand && { label: carInfo.brand, href: `/cars/${encodeURIComponent(carInfo.brand)}` },
@@ -36,18 +38,13 @@ const images = Array.isArray(carInfo?.images) && carInfo.images.length > 0
     { label: title },
   ].filter(Boolean);
 
-  const handleOrder = () => {
-    setOrderSuccess(true);
-    setTimeout(() => setOrderSuccess(false), 3000);
-  };
-
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
         <div className={styles.topBar}>
           <CarBreadcrumb items={breadcrumbs} />
           <a
-href={`https://www.encar.com/dc/dc_cardetailview.do?carid=${id}`}
+            href={`https://www.encar.com/dc/dc_cardetailview.do?carid=${id}`}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.encarLink}
@@ -67,9 +64,7 @@ href={`https://www.encar.com/dc/dc_cardetailview.do?carid=${id}`}
               <div className={styles.section}>
                 <h2 className={styles.sectionTitle}>Дэлгэрэнгүй оношилгооны мэдээлэл</h2>
                 <div className={styles.diagGrid}>
-                  {[
-                    'Хөдөлгүүр', 'Хурдны хайрцаг', 'Тоормос', 'Цахилгаан'
-                  ].map((label) => (
+                  {['Хөдөлгүүр', 'Хурдны хайрцаг', 'Тоормос', 'Цахилгаан'].map((label) => (
                     <div key={label} className={styles.diagItem}>
                       <span className={styles.diagLabel}>{label}</span>
                       <span className={`${styles.diagStatus} ${styles.ok}`}>Хэвийн</span>
@@ -81,15 +76,21 @@ href={`https://www.encar.com/dc/dc_cardetailview.do?carid=${id}`}
           </div>
 
           <div className={styles.right}>
-            <CarPriceBox priceBreakdown={priceBreakdown} onOrder={handleOrder} />
-            {orderSuccess && (
-              <div className={styles.successMsg}>
-                ✅ Захиалга амжилттай илгээгдлээ!
-              </div>
-            )}
+            <CarPriceBox
+              priceBreakdown={priceBreakdown}
+              onOrder={() => setShowModal(true)}      // ← modal нээнэ
+            />
           </div>
         </div>
       </div>
+
+      {/* OrderModal */}
+      {showModal && (
+        <OrderModal
+          car={{ title, id }}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }
