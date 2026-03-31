@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import HomeBanner from '../components/home/HomeBanner';
-import HomeBrandTable from '../components/home/HomeBrandTable';
-import HomeFeaturedCar from '../components/home/HomeFeaturedCar';
-import HomeCarSection from '../components/home/HomeCarSection';
-import HomeServices from '../components/home/HomeServices';   // ← НЭМСЭН
+import HomeBanner        from '../components/home/HomeBanner';
+import HomeBrandTable    from '../components/home/HomeBrandTable';
+import HomeBannerCarousel from '../components/home/HomeBannerCarousel';
+import HomeCarSection    from '../components/home/HomeCarSection';
+import HomeServices      from '../components/home/HomeServices';
 import { getCars, getCarById } from '../services/api';
 import { translateCar } from '../utils/translate';
 import styles from './HomePage.module.css';
@@ -11,12 +11,12 @@ import styles from './HomePage.module.css';
 const FEATURED_ID = '41739536';
 
 const FEATURED_CAR_BASE = {
-  id: FEATURED_ID,
-  title: 'Mercedes-Benz E-Class E300 Avantgarde',
-  year: 2019,
+  id:      FEATURED_ID,
+  title:   'Mercedes-Benz E-Class E300 Avantgarde',
+  year:    2019,
   mileage: 32085,
-  engine: '1991сс, Бензин',
-  price: 71520000,
+  engine:  '1991сс, Бензин',
+  price:   71520000,
 };
 
 const extractCars = (res) => {
@@ -87,13 +87,16 @@ export default function HomePage() {
     <div className={styles.page}>
       <HomeBanner />
       <HomeBrandTable />
-      <HomeFeaturedCar car={featuredCar} />
+
+      {/* Баннер + онцлох машин нэг carousel болгон нэгтгэв */}
+      <HomeBannerCarousel featuredCar={featuredCar} />
+
       <div className={styles.sections}>
         <HomeCarSection title="BMW"                         cars={bmwCars}  loading={loading} />
         <HomeCarSection title="Mercedes-Benz"               cars={mbCars}   loading={loading} />
         <HomeCarSection title="4 дугуй хөтлөгчтэй жийпүүд" cars={offroad}  loading={loading} />
       </div>
-      <HomeServices />  {/* ← НЭМСЭН */}
+      <HomeServices />
     </div>
   );
 }
